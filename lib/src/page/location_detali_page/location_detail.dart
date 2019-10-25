@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:project_muk/src/utils/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LocationDetailPage extends StatefulWidget {
   LocationDetailPage({

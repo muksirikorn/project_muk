@@ -1,12 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:project_muk/src/mode_view/province_model_view.dart';
-// import 'package:project_muk/src/model/district.dart';
-// import 'package:project_muk/src/model/province.dart';
 import 'package:project_muk/src/page/district_page/district.dart';
-
-//import 'package:project_muk/src/page/province_page/customCard.dart';
 import 'package:project_muk/src/utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
