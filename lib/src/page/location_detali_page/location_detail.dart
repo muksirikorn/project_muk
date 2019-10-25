@@ -34,7 +34,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return new Text("Loading");
+            return Text("Loading");
           }
           var document = snapshot.data;
           return Scaffold(
@@ -241,7 +241,8 @@ normal(String url) async {
 Future _openGoogleMap({String lat, String lng}) async {
   String googleUrl = 'comgooglemaps://?z=12&q=$lat,$lng';
   String appleUrl = 'https://maps.apple.com/?z=12&q=$lat,$lng';
-  if (await canLaunch("comgooglemaps://")) {
+  bool launchable = await canLaunch("comgooglemaps://");
+  if (launchable) {
     print('launching com googleUrl');
     await launch(googleUrl);
   } else if (await canLaunch(appleUrl)) {

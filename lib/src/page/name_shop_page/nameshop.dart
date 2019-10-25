@@ -35,17 +35,17 @@ class _State extends State<NameShopPage> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Center(
-                    child: new Text('Loading...',
+                    child: Text('Loading...',
                         style: TextStyle(color: Colors.white)));
               default:
-                return new ListView(
+                return ListView(
                   children:
                       snapshot.data.documents.map((DocumentSnapshot document) {
-                    return new ListTile(
+                    return ListTile(
                       leading: Icon(
                         Icons.store_mall_directory,
                         color: Colors.white,
@@ -55,7 +55,7 @@ class _State extends State<NameShopPage> {
                         Icons.keyboard_arrow_right,
                         color: Colors.white,
                       ),
-                      title: new Text(
+                      title: Text(
                         document['name'],
                         style: TextStyle(color: Colors.white),
                       ),

@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   child: RaisedButton(
                     color: Color(0xFFD56343), //set color
                     shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       "ค้นหา",
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                   child: RaisedButton(
                     color: Color(0xFFD56300), //set color
                     shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       "เพิ่มข้อมูลร้านซ่อมรถ",

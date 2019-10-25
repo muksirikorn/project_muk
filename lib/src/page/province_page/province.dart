@@ -32,20 +32,20 @@ class _ProvincePageState extends State<ProvincePage> {
           stream: Firestore.instance.collection('provinces').snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Center(
-                    child: new Text(
+                    child: Text(
                   'Loading...',
                   style: TextStyle(color: Colors.white),
                 ));
               default:
-                return new ListView(
+                return ListView(
                   children:
                       snapshot.data.documents.map((DocumentSnapshot document) {
-                    return new ListTile(
-                      title: new Text(
+                    return ListTile(
+                      title: Text(
                         document['name'],
                         style: TextStyle(color: Colors.white),
                       ),
