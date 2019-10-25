@@ -1,4 +1,3 @@
-
 import 'operation.dart';
 import 'address.dart';
 import 'contact.dart';
@@ -13,6 +12,13 @@ class Insert {
   String lng;
   String src;
 
-
-  Insert({this.name, this.address, this.contact, this.description,this.operation,this.lat,this.lng, this.src});
+  Insert(
+      {this.name,
+      this.address,
+      this.contact,
+      this.description,
+      this.operation,
+      this.lat,
+      this.lng,
+      this.src});
 }

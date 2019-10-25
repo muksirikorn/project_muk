@@ -29,191 +29,205 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-          stream: Firestore.instance.collection('store').document(widget.docID).snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return new Text("Loading");
-            }
-            var document = snapshot.data;
-            return Scaffold(
-      backgroundColor: Constant.BK_COLOR,
-      appBar: AppBar(
-        backgroundColor: Constant.ORANGE_COLOR,
-        centerTitle: true,
-        title: Text(widget.documentName),
-      ),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            height: 300,
-            child: FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: document['images'][0]['src'],
-              fit: BoxFit.cover,
+        stream: Firestore.instance
+            .collection('store')
+            .document(widget.docID)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return new Text("Loading");
+          }
+          var document = snapshot.data;
+          return Scaffold(
+            backgroundColor: Constant.BK_COLOR,
+            appBar: AppBar(
+              backgroundColor: Constant.ORANGE_COLOR,
+              centerTitle: true,
+              title: Text(widget.documentName),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
+            body: ListView(
               children: <Widget>[
                 Container(
-                  width: double.infinity,
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "ชื่อร้าน",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.store),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(document['name'],
-                                  style: TextStyle(color: Colors.black)),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Divider(
-                              height: 2,
-                              color: Colors.grey.shade300,
+                  height: 300,
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: document['images'][0]['src'],
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        width: double.infinity,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "ชื่อร้าน",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.store),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(document['name'],
+                                        style: TextStyle(color: Colors.black)),
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 5, bottom: 5),
+                                  child: Divider(
+                                    height: 2,
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                                Text(
+                                  "ที่อยู่",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.home),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Flexible(
+                                        child: Text(
+                                            document['address']['detail'],
+                                            style: TextStyle(
+                                                color: Colors.black))),
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 5, bottom: 5),
+                                  child: Divider(
+                                    height: 2,
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                                Text(
+                                  "โทร",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.call),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    GestureDetector(
+                                        onTap: () {
+                                          normal(document['contact']
+                                              ['mobilePhone']);
+                                        },
+                                        child: Text(
+                                            document['contact']['mobilePhone'],
+                                            style: TextStyle(
+                                                color: Colors.black))),
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 5, bottom: 5),
+                                  child: Divider(
+                                    height: 2,
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                                Text(
+                                  "รายละเอียด",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.library_books),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Flexible(
+                                        child: Text(document['description'],
+                                            style: TextStyle(
+                                                color: Colors.black))),
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 5, bottom: 5),
+                                  child: Divider(
+                                    height: 2,
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                                Text(
+                                  "รายละเอียด",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.access_time),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(document['operation']['open'],
+                                        style: TextStyle(color: Colors.black)),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.access_time),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(document['operation']['close'],
+                                        style: TextStyle(color: Colors.black)),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            "ที่อยู่",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.home),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Flexible(
-                                  child: Text(document['address']['detail'],
-                                      style: TextStyle(color: Colors.black))),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Divider(
-                              height: 2,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                          Text(
-                            "โทร",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.call),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    normal(document['contact']['mobilePhone']);
-                                  },
-                                  child: Text(document['contact']['mobilePhone'],
-                                      style: TextStyle(color: Colors.black))),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Divider(
-                              height: 2,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                          Text(
-                            "รายละเอียด",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.library_books),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Flexible(
-                                  child: Text(document['description'],
-                                      style: TextStyle(color: Colors.black))),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Divider(
-                              height: 2,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                          Text(
-                            "รายละเอียด",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.access_time),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(document['open'],
-                                  style: TextStyle(color: Colors.black)),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.access_time),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(document['open'],
-                                  style: TextStyle(color: Colors.black)),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Constant.ORANGE_COLOR,
-        onPressed: () {
-          _openGoogleMap(lat: document['location']['lat'], lng: document['location']['lng']);
-        },
-        tooltip: 'นำทาง',
-        child: Icon(Icons.location_on),
-      ),
-    );
-          }
-      );
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Constant.ORANGE_COLOR,
+              onPressed: () {
+                _openGoogleMap(
+                    lat: document['location']['lat'],
+                    lng: document['location']['lng']);
+              },
+              tooltip: 'นำทาง',
+              child: Icon(Icons.location_on),
+            ),
+          );
+        });
   }
 }
 
@@ -246,5 +260,3 @@ Future _openGoogleMap({String lat, String lng}) async {
     }
   }
 }
-
-

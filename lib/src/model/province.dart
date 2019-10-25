@@ -1,4 +1,4 @@
-class Province{
+class Province {
   String provinceKey;
   String name;
   int districtCount;

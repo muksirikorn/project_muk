@@ -41,31 +41,38 @@ class _ProvincePageState extends State<ProvincePage> {
             if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return Center(child: new Text('Loading...',style: TextStyle(color: Colors.white),));
+                return Center(
+                    child: new Text(
+                  'Loading...',
+                  style: TextStyle(color: Colors.white),
+                ));
               default:
                 return new ListView(
                   children:
                       snapshot.data.documents.map((DocumentSnapshot document) {
                     return new ListTile(
-                      title: new Text(document['name'],style: TextStyle(color: Colors.white),),
-                      trailing: Icon(Icons.keyboard_arrow_right,color: Colors.white,),
+                      title: new Text(
+                        document['name'],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      trailing: Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.white,
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => DistrictPage(
                                   provinceName: document['name'],
-                                  provinceId: document.documentID
-                              )),
+                                  provinceId: document.documentID)),
                         );
                       },
                     );
-
                   }).toList(),
                 );
             }
           },
-        )
-    );
+        ));
   }
 }

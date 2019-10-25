@@ -27,12 +27,10 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(Icons.store_mall_directory,size: 100),
+                  Icon(Icons.store_mall_directory, size: 100),
                   buildUsernameTextFormField(),
                   buildPasswordTextFormField(),
                   buildLoginContainer(),
-//                  buildForgotSizedBox(),
-                  if(false) Text("xxxxxxx")
                 ],
               ),
             ),
@@ -41,18 +39,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-//  SizedBox buildForgotSizedBox() {
-//    return SizedBox(
-//      width: double.infinity,
-//      child: FlatButton(
-//        splashColor: Colors.blue,
-//        child: Text("Forgot password?"),
-//        onPressed: () {
-//          //todo
-//        },
-//      ),
-//    );
-//  }
 
   Container buildLoginContainer() {
     return Container(
@@ -69,33 +55,18 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onPressed: () async {
           Navigator.pushNamed(context, Constant.REIGTER_ROUTE);
-//          _formKey.currentState.save();
-
-//          final result = await AuthService().login(user);
-//          if (result) {
-//            Navigator.pushReplacementNamed(context, Constant.HOME_ROUTE);
-//          } else {
-//            showAlertDialog(title: "title", content: "login failure");
-//          }
         },
       ),
     );
   }
 
-
-
   TextFormField buildPasswordTextFormField() {
     return TextFormField(
-      onSaved: (String value) {
-//        user.password = value;
-      },
+      onSaved: (String value) {},
       obscureText: true,
       decoration: InputDecoration(
-//                  hintStyle: TextStyle(color: Colors.red),
-//                  labelStyle: TextStyle(color: Colors.red),
           icon: Icon(
             Icons.lock,
-            // color: Colors.red,
           ),
           labelText: "Password"),
     );
@@ -103,15 +74,10 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildUsernameTextFormField() {
     return TextFormField(
-      onSaved: (String value) {
-//        user.username = value;
-      },
+      onSaved: (String value) {},
       decoration: InputDecoration(
-//                  hintStyle: TextStyle(color: Colors.red),
-//                  labelStyle: TextStyle(color: Colors.red),
           icon: Icon(
             Icons.person,
-            // color: Colors.red,
           ),
           hintText: "example@gmail.com",
           labelText: "Email"),
@@ -134,4 +100,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

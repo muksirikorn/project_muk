@@ -17,32 +17,45 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Card(
-//              color: Colors.white, //set color
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Container(
-                    height: 270,
-                    width: 320,
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 20,),
-                        Image.asset(Constant.IMAGE_CAR,width: 300,),
-                      SizedBox(height: 30,),
-                        Text("ร้านซ่อมรถ",style: TextStyle(fontSize: 20),),
-                        SizedBox(height: 10,),
-                      ],
-                    ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Container(
+                  height: 270,
+                  width: 320,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Image.asset(
+                        Constant.IMAGE_CAR,
+                        width: 300,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        "ร้านซ่อมรถ",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
                 ),
+              ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Column(
               children: <Widget>[
                 Container(
                   height: 50,
                   width: 100,
                   child: RaisedButton(
-                    color: Color(0xFFD56343),//set color
+                    color: Color(0xFFD56343), //set color
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(5),
                     ),
@@ -53,10 +66,14 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);
+                    },
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   height: 50,
                   width: 200,
@@ -72,14 +89,15 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {Navigator.pushNamed(context, Constant.LOGIN_ROUTE);},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Constant.LOGIN_ROUTE);
+                    },
                   ),
                 ),
               ],
             ),
           ],
         ),
-
       ),
     );
   }

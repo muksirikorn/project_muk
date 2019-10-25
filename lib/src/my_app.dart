@@ -1,4 +1,3 @@
-
 import 'package:project_muk/src/page/district_page/district.dart';
 import 'package:project_muk/src/page/home_page/home.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:project_muk/src/page/province_page/province.dart';
 import 'package:project_muk/src/page/regiter_page/register.dart';
 import 'package:project_muk/src/themes/app_themes.dart';
 import 'package:project_muk/src/utils/constant.dart';
-
 
 class MyApp extends StatelessWidget {
   final _route = <String, WidgetBuilder>{
@@ -33,4 +31,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
