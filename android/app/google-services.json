@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "99164089430",
+    "firebase_url": "https://muksirikorn-eb7e1.firebaseio.com",
+    "project_id": "muksirikorn-eb7e1",
+    "storage_bucket": "muksirikorn-eb7e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99164089430:android:673491c2739f9c94815ff7",
+        "android_client_info": {
+          "package_name": "com.example.project_muk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99164089430-fdosfocoo9j3f0983a4aodmc3l7h6m0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2_JEXzKgGHPze4asNWwLD4DHmegMMhxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99164089430-fdosfocoo9j3f0983a4aodmc3l7h6m0l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
