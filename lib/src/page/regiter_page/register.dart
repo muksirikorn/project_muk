@@ -9,6 +9,8 @@ import 'package:project_muk/src/model/insert.dart';
 import 'package:project_muk/src/page/home_page/home.dart';
 import 'package:project_muk/src/utils/constant.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key, this.provinceId, this.districtId}) : super(key: key);
@@ -31,6 +33,15 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  Future<String> onImageUploading(File imagePath) async {
+    final StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('${Uuid().v1()}.png');
+    final StorageUploadTask task = firebaseStorageRef.putFile(imagePath);
+    StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
+    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
   String _color = '';
@@ -45,13 +56,19 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<bool> _submitForm(String provinceId, String districtId) async {
     final FormState form = _formKey.currentState;
     form.save();
+    //upload image
+    String imgUrl = await onImageUploading(_image);
+
     await Firestore.instance.collection('store').document().setData({
-      "name": 'hi',
+      "name": newInsert.name,
       "address": {
         "detail": newAddress.detail,
         "provicne_id": provinceId,
         "districts_id": districtId,
       },
+      "images": [
+        {"src": imgUrl}
+      ],
       "contact": {"mobilePhone": newContact.mobilePhoneNumber},
       "location": {
         "lat": "hi",
@@ -176,7 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         TextFormField(
                           decoration: new InputDecoration(
                             border: new OutlineInputBorder(),
-                            hintText: 'กรุณา�����้อนละติจูด',
+                            hintText: 'กรุณา�������้��นละติจูด',
                             labelText: 'ละติจูด',
                             prefixIcon: const Icon(
                               Icons.location_on,
@@ -187,7 +204,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         TextFormField(
                           decoration: new InputDecoration(
                             border: new OutlineInputBorder(),
-                            hintText: 'กรุณาป้อ���ลองติจูด',
+                            hintText: 'กร��ณาป้อ���ลองติจูด',
                             labelText: 'ลองติจูด',
                             prefixIcon: const Icon(
                               Icons.location_on,
