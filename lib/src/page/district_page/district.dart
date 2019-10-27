@@ -22,6 +22,7 @@ class _DistrictPageState extends State<DistrictPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.provinceId);
     return Scaffold(
         backgroundColor: Constant.BK_COLOR,
         appBar: AppBar(
@@ -59,9 +60,13 @@ class _DistrictPageState extends State<DistrictPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => NameShopPage(
-                                  provinceName: document['name'],
-                                  provinceId: document.documentID)),
+                            builder: (context) => NameShopPage(
+                                  provinceId: widget.provinceId,
+                                  provinceName: widget.provinceName,
+                                  districtName: document['name'],
+                                  districtId: document.documentID,
+                                ),
+                          ),
                         );
                       },
                     );

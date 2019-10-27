@@ -6,10 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:project_muk/src/model/address.dart';
 import 'package:project_muk/src/model/contact.dart';
 import 'package:project_muk/src/model/insert.dart';
+import 'package:project_muk/src/page/home_page/home.dart';
 import 'package:project_muk/src/utils/constant.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 
 class RegisterPage extends StatefulWidget {
+  RegisterPage({Key key, this.provinceId, this.districtId}) : super(key: key);
+
+  final String provinceId;
+
+  final String districtId;
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -36,15 +42,15 @@ class _RegisterPageState extends State<RegisterPage> {
   Contact newContact = new Contact();
   Address newAddress = new Address();
 
-  Future<Null> _submitForm() async {
+  Future<bool> _submitForm(String provinceId, String districtId) async {
     final FormState form = _formKey.currentState;
     form.save();
     await Firestore.instance.collection('store').document().setData({
       "name": 'hi',
       "address": {
         "detail": newAddress.detail,
-        "provicne_id": "hi",
-        "districts_id": "hi",
+        "provicne_id": provinceId,
+        "districts_id": districtId,
       },
       "contact": {"mobilePhone": newContact.mobilePhoneNumber},
       "location": {
@@ -52,31 +58,36 @@ class _RegisterPageState extends State<RegisterPage> {
         "lng": "hi",
       },
       "description": newInsert.description,
-      "operation": {"open": opentime, "close": closetime},
+      "operation": {
+        "open": opentime.format(context),
+        "close": closetime.format(context)
+      },
     });
 
     print('Name: ${newInsert.name}');
     print('Address: ${newAddress.detail}');
     print('MobilePhoneNumber: ${newContact.mobilePhoneNumber}');
     print('Description: ${newInsert.description}');
-    print('OpenTime: ${opentime}');
-    print('CloseTime: ${closetime}');
+    print(opentime.format(context));
+    print(closetime.format(context));
     print('Lat: ${newInsert.lat}');
     print('Lng: ${newInsert.lng}');
     print('Src: ${newInsert.src}');
 
     print('done');
-    return Null;
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.provinceId);
+    print(widget.districtId);
     return Scaffold(
         backgroundColor: Constant.BK_COLOR,
         appBar: AppBar(
           backgroundColor: Constant.ORANGE_COLOR,
           centerTitle: true,
-          title: Text("login"),
+          title: Text('Add new shop'),
         ),
         body: Form(
           key: _formKey,
@@ -220,8 +231,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold),
                             ),
-                            onPressed: () {
-                              _submitForm();
+                            onPressed: () async {
+                              bool done = await _submitForm(
+                                  widget.provinceId, widget.districtId);
+                              if (done) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return HomePage();
+                                }));
+                              }
                             },
                           ),
                         ),
