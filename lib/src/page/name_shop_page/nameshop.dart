@@ -115,6 +115,8 @@ class _State extends State<NameShopPage> {
                                     builder: (context) => LocationDetailPage(
                                           docID: document.documentID,
                                           documentName: document['name'],
+                                          provinceId: widget.provinceId,
+                                          districtId: widget.districtId,
                                         )),
                               );
                             },

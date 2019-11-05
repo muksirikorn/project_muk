@@ -4,16 +4,22 @@ import 'package:flutter/material.dart';
 import '../../utils/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
+import '../update_page/update.dart';
 
 class LocationDetailPage extends StatefulWidget {
-  LocationDetailPage({
-    Key key,
-    this.docID,
-    this.documentName,
-  }) : super(key: key);
+  LocationDetailPage(
+      {Key key,
+      this.docID,
+      this.documentName,
+      this.districtId,
+      this.provinceId})
+      : super(key: key);
 
   final String docID;
   final String documentName;
+  final String provinceId;
+
+  final String districtId;
 
   @override
   _LocationDetailPageState createState() => _LocationDetailPageState();
@@ -34,9 +40,10 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
   }
 
   Future _openGoogleMap({String lat, String lng}) async {
-    bool launchable = await canLaunch('comgooglemaps://?z=12&q=$lat,$lng');
+    bool launchable =
+        await canLaunch('https://maps.google.com/?z=12&q=$lat,$lng');
     if (launchable) {
-      await launch('comgooglemaps://?z=12&q=$lat,$lng');
+      await launch('https://maps.google.com/?z=12&q=$lat,$lng');
     } else {
       return SnackBar(
         content: Text('Can not open urls'),
@@ -44,26 +51,29 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     }
   }
 
+  String lat;
+  String lng;
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: Firestore.instance
-            .collection('store')
-            .document(widget.docID)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Text("Loading");
-          }
-          var document = snapshot.data;
-          return Scaffold(
-            backgroundColor: Constant.BK_COLOR,
-            appBar: AppBar(
-              backgroundColor: Constant.ORANGE_COLOR,
-              centerTitle: true,
-              title: Text(widget.documentName),
-            ),
-            body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Constant.BK_COLOR,
+      appBar: AppBar(
+        backgroundColor: Constant.ORANGE_COLOR,
+        centerTitle: true,
+        title: Text(widget.documentName),
+      ),
+      body: StreamBuilder(
+          stream: Firestore.instance
+              .collection('store')
+              .document(widget.docID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Text("Loading");
+            }
+            var document = snapshot.data;
+            return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -122,18 +132,26 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(Icons.home),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Flexible(
+                                  GestureDetector(
+                                    onTap: () {
+                                      _openGoogleMap(
+                                          lat: document['location']['lat'],
+                                          lng: document['location']['lng']);
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.home),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Flexible(
                                           child: Text(
                                               document['address']['detail'],
                                               style: TextStyle(
-                                                  color: Colors.black))),
-                                    ],
+                                                  color: Colors.black)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -242,18 +260,23 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                   ),
                 ],
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Constant.ORANGE_COLOR,
-              onPressed: () {
-                _openGoogleMap(
-                    lat: document['location']['lat'],
-                    lng: document['location']['lng']);
-              },
-              tooltip: 'นำทาง',
-              child: Icon(Icons.location_on),
-            ),
+            );
+          }),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Constant.ORANGE_COLOR,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UpdatePage(
+                      docID: widget.docID,
+                      provinceId: widget.provinceId,
+                      districtId: widget.districtId,
+                    )),
           );
-        });
+        },
+        child: Icon(Icons.edit),
+      ),
+    );
   }
 }
