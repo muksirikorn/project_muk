@@ -197,12 +197,11 @@ class _UpdatePageState extends State<UpdatePage> {
                                     prefixIcon: const Icon(
                                       Icons.access_time,
                                     )),
-                                    onSaved: (val) => newInsert.operation.open = val,
-                                // onSaved: (t) => setState(() => opentime = t),
+                                onChanged: (t) => setState(() => opentime = t),
                               ),
                               buildSizedBox(),
                               TimePickerFormField(
-                                 initialValue: document['operation']['close'],
+                                initialValue: document['operation']['close'],
                                 format: timeFormat,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -210,14 +209,14 @@ class _UpdatePageState extends State<UpdatePage> {
                                     prefixIcon: const Icon(
                                       Icons.access_time,
                                     )),
-                                onSaved: (val) => newInsert.operation.close = val,
+                                onChanged: (t) => setState(() => closetime = t),
                               ),
                               buildSizedBox(),
                               TextFormField(
                                 initialValue: document['location']['lat'],
                                 decoration: new InputDecoration(
                                   border: new OutlineInputBorder(),
-                                  hintText: '���รุณา���������้��นละติจูด',
+                                  hintText: 'กรุณาป้อนละติจูด',
                                   labelText: 'ละติจูด',
                                   prefixIcon: const Icon(
                                     Icons.location_on,
@@ -229,7 +228,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                 initialValue: document['location']['lng'],
                                 decoration: new InputDecoration(
                                   border: new OutlineInputBorder(),
-                                  hintText: 'กร��ณาป้อ���ลองติจูด',
+                                  hintText: 'กรุณาป้อนลองติจูด',
                                   labelText: 'ลองติจูด',
                                   prefixIcon: const Icon(
                                     Icons.location_on,

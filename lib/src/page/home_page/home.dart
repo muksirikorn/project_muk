@@ -11,92 +11,81 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.BK_COLOR, //set color
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Container(
-                  height: 270,
-                  width: 320,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Image.asset(
-                        Constant.IMAGE_CAR,
-                        width: 300,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Text(
-                        "ร้านซ่อมรถ",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Constant.ORANGE_COLOR,
+        actions: <Widget>[
+          const Icon(Icons.exit_to_app),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Container(
+                    height: 270,
+                    width: 320,
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Image.asset(
+                          Constant.IMAGE_CAR,
+                          width: 300,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "ร้านซ่อมรถ",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Column(
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  width: 100,
-                  child: RaisedButton(
-                    color: Color(0xFFD56343), //set color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+              SizedBox(
+                height: 20,
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    width: 100,
+                    child: RaisedButton(
+                      color: Color(0xFFD56343), //set color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        "ค้นหา",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);
+                      },
                     ),
-                    child: Text(
-                      "ค้นหา",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);
-                    },
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 50,
-                  width: 200,
-                  child: RaisedButton(
-                    color: Color(0xFFD56300), //set color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      "เพิ่มข้อมูลร้านซ่อมรถ",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, Constant.LOGIN_ROUTE);
-                    },
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

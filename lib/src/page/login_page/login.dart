@@ -12,11 +12,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.BK_COLOR,
-      appBar: AppBar(
-        backgroundColor: Constant.ORANGE_COLOR,
-        centerTitle: true,
-        title: Text("login"),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Constant.ORANGE_COLOR,
+      //   centerTitle: true,
+      //   title: Text("login"),
+      // ),
       body: Center(
         child: Card(
           color: Colors.white,
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         onPressed: () async {
-          Navigator.pushNamed(context, Constant.REIGTER_ROUTE); 
+          Navigator.pushNamed(context, Constant.HOME_ROUTE);
         },
       ),
     );

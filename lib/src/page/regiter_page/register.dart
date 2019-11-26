@@ -120,8 +120,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFormField(
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
                             hintText: 'กรุณาป้อนชื่อร้าน',
                             labelText: 'ชื่อร้าน',
                             prefixIcon: const Icon(
@@ -132,8 +132,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         buildSizedBox(),
                         TextFormField(
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
                             hintText: 'กรุณาป้อนที่อยู่',
                             labelText: 'ที่อยู่',
                             prefixIcon: const Icon(
@@ -144,8 +144,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         buildSizedBox(),
                         TextFormField(
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
                             hintText: 'กรุณาป้อนเบอร์โทรศัพท์',
                             labelText: 'เบอร์โทรศัพท์',
                             prefixIcon: const Icon(
@@ -157,8 +157,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         buildSizedBox(),
                         TextFormField(
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
                             hintText: 'กรุณาป้อนรายละเอียดร้าน',
                             labelText: 'รายละเอียดร้าน',
                             prefixIcon: const Icon(
@@ -191,9 +191,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         buildSizedBox(),
                         TextFormField(
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(),
-                            hintText: 'กรุณา�������้��นละติจูด',
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'กรุณาป้อนละติจูด',
                             labelText: 'ละติจูด',
                             prefixIcon: const Icon(
                               Icons.location_on,
@@ -202,9 +202,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         buildSizedBox(),
                         TextFormField(
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(),
-                            hintText: 'กร��ณาป้อ���ลองติจูด',
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'รุณาป้อนลองติจูด',
                             labelText: 'ลองติจูด',
                             prefixIcon: const Icon(
                               Icons.location_on,
@@ -239,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: RaisedButton(
                             color: Color(0xFFD56343),
                             shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             child: Text(
                               "ยืนยัน",

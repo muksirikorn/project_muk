@@ -1,13 +1,13 @@
-import 'package:project_muk/src/page/district_page/district.dart';
-import 'package:project_muk/src/page/home_page/home.dart';
 import 'package:flutter/material.dart';
-import 'package:project_muk/src/page/location_detali_page/location_detail.dart';
-import 'package:project_muk/src/page/login_page/login.dart';
-import 'package:project_muk/src/page/name_shop_page/nameshop.dart';
-import 'package:project_muk/src/page/province_page/province.dart';
-import 'package:project_muk/src/page/regiter_page/register.dart';
-import 'package:project_muk/src/themes/app_themes.dart';
-import 'package:project_muk/src/utils/constant.dart';
+import '../src/page/district_page/district.dart';
+import '../src/page/home_page/home.dart';
+import '../src/page/location_detali_page/location_detail.dart';
+import '../src/page/login_page/login.dart';
+import '../src/page/name_shop_page/nameshop.dart';
+import '../src/page/province_page/province.dart';
+import '../src/page/regiter_page/register.dart';
+import '../src/themes/app_themes.dart';
+import '../src/utils/constant.dart';
 
 class MyApp extends StatelessWidget {
   final _route = <String, WidgetBuilder>{
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "ค้นหาร้านซ่อมรถ",
       routes: _route,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
