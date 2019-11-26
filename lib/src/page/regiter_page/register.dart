@@ -71,8 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
       ],
       "contact": {"mobilePhone": newContact.mobilePhoneNumber},
       "location": {
-        "lat": "hi",
-        "lng": "hi",
+        "lat": "",
+        "lng": "",
       },
       "description": newInsert.description,
       "operation": {

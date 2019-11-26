@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         onPressed: () async {
-          Navigator.pushNamed(context, Constant.REIGTER_ROUTE);
+          Navigator.pushNamed(context, Constant.REIGTER_ROUTE); 
         },
       ),
     );

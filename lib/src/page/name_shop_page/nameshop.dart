@@ -125,15 +125,15 @@ class _State extends State<NameShopPage> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text('Material Dialog'),
+                                      title: Text('ลบข้อมูลร้าน'),
                                       content: Text(
-                                          'This is the content of the material dialog'),
+                                          'ต้องการลบข้อมูลร้าน?'),
                                       actions: <Widget>[
                                         FlatButton(
                                             onPressed: () {
                                               _dismissDialog();
                                             },
-                                            child: Text('Close')),
+                                            child: Text('ยกเลิก')),
                                         FlatButton(
                                           onPressed: () {
                                             Firestore.instance
@@ -142,7 +142,7 @@ class _State extends State<NameShopPage> {
                                                 .delete();
                                             _dismissDialog();
                                           },
-                                          child: Text('confirm'),
+                                          child: Text('ยืนยัน'),
                                         )
                                       ],
                                     );

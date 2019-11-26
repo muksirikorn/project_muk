@@ -75,8 +75,8 @@ class _UpdatePageState extends State<UpdatePage> {
       ],
       "contact": {"mobilePhone": newContact.mobilePhoneNumber},
       "location": {
-        "lat": "hi",
-        "lng": "hi",
+        "lat": "",
+        "lng": "",
       },
       "description": newInsert.description,
       "operation": {
@@ -189,6 +189,7 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               buildSizedBox(),
                               TimePickerFormField(
+                                initialValue: document['operation']['open'],
                                 format: timeFormat,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -196,10 +197,12 @@ class _UpdatePageState extends State<UpdatePage> {
                                     prefixIcon: const Icon(
                                       Icons.access_time,
                                     )),
-                                onChanged: (t) => setState(() => opentime = t),
+                                    onSaved: (val) => newInsert.operation.open = val,
+                                // onSaved: (t) => setState(() => opentime = t),
                               ),
                               buildSizedBox(),
                               TimePickerFormField(
+                                 initialValue: document['operation']['close'],
                                 format: timeFormat,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -207,10 +210,11 @@ class _UpdatePageState extends State<UpdatePage> {
                                     prefixIcon: const Icon(
                                       Icons.access_time,
                                     )),
-                                onChanged: (t) => setState(() => closetime = t),
+                                onSaved: (val) => newInsert.operation.close = val,
                               ),
                               buildSizedBox(),
                               TextFormField(
+                                initialValue: document['location']['lat'],
                                 decoration: new InputDecoration(
                                   border: new OutlineInputBorder(),
                                   hintText: '���รุณา���������้��นละติจูด',
@@ -222,6 +226,7 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               buildSizedBox(),
                               TextFormField(
+                                initialValue: document['location']['lng'],
                                 decoration: new InputDecoration(
                                   border: new OutlineInputBorder(),
                                   hintText: 'กร��ณาป้อ���ลองติจูด',
