@@ -108,7 +108,7 @@ class _UpdatePageState extends State<UpdatePage> {
         appBar: AppBar(
           backgroundColor: Constant.ORANGE_COLOR,
           centerTitle: true,
-          title: Text('Add new shop'),
+          title: Text('Update shop'),
         ),
         body: StreamBuilder(
             stream: Firestore.instance
@@ -120,6 +120,19 @@ class _UpdatePageState extends State<UpdatePage> {
                 return Text("Loading");
               }
               var document = snapshot.data;
+              var _openHour = document['operation']['open'].split(":")[0];
+              var _openMinute = document['operation']['open'].split(":")[1];
+              TimeOfDay _openTime = TimeOfDay(
+                hour: int.parse(_openHour),
+                minute: int.parse(_openMinute),
+              );
+
+              var _closeHour = document['operation']['close'].split(":")[0];
+              var _closeMinute = document['operation']['close'].split(":")[1];
+              TimeOfDay _closeTime = TimeOfDay(
+                hour: int.parse(_closeHour),
+                minute: int.parse(_closeMinute),
+              );
               return Form(
                 key: _formKey,
                 autovalidate: true,
@@ -179,7 +192,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                 initialValue: document['description'],
                                 decoration: new InputDecoration(
                                   border: new OutlineInputBorder(),
-                                  hintText: 'กรุณาป้อนรายละเอียดร้าน',
+                                  hintText: 'กรุณาป้อนรายละเ���ยดร้าน',
                                   labelText: 'รายละเอียดร้าน',
                                   prefixIcon: const Icon(
                                     Icons.library_books,
@@ -189,7 +202,7 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               buildSizedBox(),
                               TimePickerFormField(
-                                initialValue: document['operation']['open'],
+                                initialValue: _openTime,
                                 format: timeFormat,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -201,7 +214,7 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               buildSizedBox(),
                               TimePickerFormField(
-                                initialValue: document['operation']['close'],
+                                initialValue: _closeTime,
                                 format: timeFormat,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
