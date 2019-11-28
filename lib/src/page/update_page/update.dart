@@ -259,6 +259,16 @@ class _UpdatePageState extends State<UpdatePage> {
                                           : Image.file(_image),
                                     ),
                                   ),
+                                  //  Container(
+                                  //   height: 100.0,
+                                  //   width: 130.0,
+                                  //   child: Center(
+                                  //     initialValue: document['images']['0']['src'],
+                                  //     child: _image == null
+                                  //         ? Text('กรุณาเลือกรูปภาพ')
+                                  //         : Image.file(_image),
+                                  //   ),
+                                  // ),
                                   FloatingActionButton(
                                     onPressed: getImageFromCam,
                                     tooltip: 'Pick Image',

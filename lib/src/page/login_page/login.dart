@@ -12,22 +12,20 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.BK_COLOR,
-      // appBar: AppBar(
-      //   backgroundColor: Constant.ORANGE_COLOR,
-      //   centerTitle: true,
-      //   title: Text("login"),
-      // ),
       body: Center(
         child: Card(
           color: Colors.white,
-          margin: EdgeInsets.only(left: 30, right: 30),
+          margin: EdgeInsets.only(left: 40, right: 40),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(22.0),
+            padding: const EdgeInsets.all(30.0),
             child: Form(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(Icons.store_mall_directory, size: 100),
+                  Image.asset(
+                          Constant.IMAGE_CAR,
+                          width: 400,
+                        ),
                   buildUsernameTextFormField(),
                   buildPasswordTextFormField(),
                   buildLoginContainer(),

@@ -12,54 +12,45 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Constant.BK_COLOR, //set color
       appBar: AppBar(
+        bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.directions_car)),
+                Tab(icon: Icon(Icons.directions_bike)),
+              ],
+            ),
         automaticallyImplyLeading: false,
         backgroundColor: Constant.ORANGE_COLOR,
+        title: Text('ร้านซ่อมรถ'),
         actions: <Widget>[
           const Icon(Icons.exit_to_app),
+        onPressed: () {
+            Navigator.pushNamed(context, Constant.LOGINPAGE_ROUTE);
+                      },
+                    ,
         ],
-        // onPressed: (){
-        //   Navigator.pushNamed(context, Constant.LOGIN_ROUTE);
-        // }
       ),
+
+       body: new GridView.count(
+        crossAxisCount: 2,
+        children: new List<Widget>.generate(16, (index) {
+          return new GridTile(
+            child: new Card(
+              color: Colors.white,
+              child: new Center(
+                child: new Text(''),
+              )
+            ),
+          );
+        }),
+      ),
+
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Container(
-                    height: 270,
-                    width: 320,
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Image.asset(
-                          Constant.IMAGE_CAR,
-                          width: 300,
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          "ร้านซ่อมรถ",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
+
               Column(
                 children: <Widget>[
                   Container(
