@@ -17,6 +17,9 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           const Icon(Icons.exit_to_app),
         ],
+        // onPressed: (){
+        //   Navigator.pushNamed(context, Constant.LOGIN_ROUTE);
+        // }
       ),
       body: SingleChildScrollView(
         child: Center(

@@ -102,8 +102,9 @@ class _State extends State<NameShopPage> {
 
                             subtitle: Row(
                               children: <Widget>[
-                                Text(document['description'],
-                                    style: TextStyle(color: Colors.white))
+                                Flexible(
+                                child: Text(document['description'],
+                                    style: TextStyle(color: Colors.white)),)
                               ],
                             ),
                             trailing: Icon(Icons.keyboard_arrow_right,
