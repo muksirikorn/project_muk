@@ -35,7 +35,6 @@ class _State extends State<NameShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.provinceId);
     return Scaffold(
         backgroundColor: Constant.BK_COLOR,
         appBar: AppBar(
@@ -103,8 +102,9 @@ class _State extends State<NameShopPage> {
                             subtitle: Row(
                               children: <Widget>[
                                 Flexible(
-                                child: Text(document['description'],
-                                    style: TextStyle(color: Colors.white)),)
+                                  child: Text(document['description'],
+                                      style: TextStyle(color: Colors.white)),
+                                )
                               ],
                             ),
                             trailing: Icon(Icons.keyboard_arrow_right,
@@ -127,8 +127,7 @@ class _State extends State<NameShopPage> {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: Text('ลบข้อมูลร้าน'),
-                                      content: Text(
-                                          'ต้องการลบข้อมูลร้าน?'),
+                                      content: Text('ต้องการลบข้อมูลร้าน?'),
                                       actions: <Widget>[
                                         FlatButton(
                                             onPressed: () {

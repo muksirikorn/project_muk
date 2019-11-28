@@ -85,8 +85,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.provinceId);
-    print(widget.districtId);
     return Scaffold(
         backgroundColor: Constant.BK_COLOR,
         appBar: AppBar(
