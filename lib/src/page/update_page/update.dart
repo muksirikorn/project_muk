@@ -44,8 +44,6 @@ class _UpdatePageState extends State<UpdatePage> {
   }
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
-  String _color = '';
   final timeFormat = DateFormat("h:mm a");
   DateTime date;
   TimeOfDay opentime, closetime;

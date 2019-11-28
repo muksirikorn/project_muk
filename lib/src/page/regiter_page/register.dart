@@ -3,14 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_muk/src/model/address.dart';
-import 'package:project_muk/src/model/contact.dart';
-import 'package:project_muk/src/model/insert.dart';
-import 'package:project_muk/src/page/home_page/home.dart';
-import 'package:project_muk/src/utils/constant.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
-import 'package:uuid/uuid.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import '../../model/address.dart';
+import '../../model/contact.dart';
+import '../../model/insert.dart';
+import '../home_page/home.dart';
+import '../../utils/constant.dart';
+import '../../utils/image_service.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key, this.provinceId, this.districtId}) : super(key: key);
@@ -33,18 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  Future<String> onImageUploading(File imagePath) async {
-    final StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('${Uuid().v1()}.png');
-    final StorageUploadTask task = firebaseStorageRef.putFile(imagePath);
-    StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
-    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    return downloadUrl;
-  }
-
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
-  String _color = '';
   final timeFormat = DateFormat("h:mm a");
   DateTime date;
   TimeOfDay opentime, closetime;
