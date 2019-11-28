@@ -249,26 +249,33 @@ class _UpdatePageState extends State<UpdatePage> {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Container(
+                                    height: 200.0,
+                                    width: 200.0,
+                                    child: Center(
+                                      child:
+                                          document['images'][0]['src'] == null
+                                              ? Text('No Image')
+                                              : Image.network(
+                                                  document['images'][0]['src']),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Container(
-                                    height: 100.0,
-                                    width: 130.0,
+                                    height: 200.0,
+                                    width: 200.0,
                                     child: Center(
                                       child: _image == null
                                           ? Text('กรุณาเลือกรูปภาพ')
                                           : Image.file(_image),
                                     ),
                                   ),
-                                  //  Container(
-                                  //   height: 100.0,
-                                  //   width: 130.0,
-                                  //   child: Center(
-                                  //     initialValue: document['images']['0']['src'],
-                                  //     child: _image == null
-                                  //         ? Text('กรุณาเลือกรูปภาพ')
-                                  //         : Image.file(_image),
-                                  //   ),
-                                  // ),
                                   FloatingActionButton(
                                     onPressed: getImageFromCam,
                                     tooltip: 'Pick Image',

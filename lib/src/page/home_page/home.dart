@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:project_muk/src/utils/constant.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,77 +11,118 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constant.BK_COLOR, //set color
-      appBar: AppBar(
-        bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_bike)),
-              ],
-            ),
-        automaticallyImplyLeading: false,
-        backgroundColor: Constant.ORANGE_COLOR,
-        title: Text('ร้านซ่อมรถ'),
-        actions: <Widget>[
-          const Icon(Icons.exit_to_app),
-        onPressed: () {
-            Navigator.pushNamed(context, Constant.LOGINPAGE_ROUTE);
-                      },
-                    ,
-        ],
-      ),
-
-       body: new GridView.count(
-        crossAxisCount: 2,
-        children: new List<Widget>.generate(16, (index) {
-          return new GridTile(
-            child: new Card(
-              color: Colors.white,
-              child: new Center(
-                child: new Text(''),
-              )
-            ),
-          );
-        }),
-      ),
-
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: 100,
-                    child: RaisedButton(
-                      color: Color(0xFFD56343), //set color
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        "ค้นหา",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Constant.BK_COLOR, //set color
+        appBar: AppBar(
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.directions_car)),
+              Tab(icon: Icon(Icons.directions_bike)),
             ],
           ),
+          automaticallyImplyLeading: false,
+          backgroundColor: Constant.ORANGE_COLOR,
+          title: Text('ร้านซ่อมรถ'),
+          actions: <Widget>[
+            RaisedButton(
+              color: Constant.ORANGE_COLOR,
+              child: const Icon(Icons.exit_to_app),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+        body: TabBarView(
+          children: [
+            homeCar(),
+            homeBike(),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          tooltip: 'ค้นหา',
+          onPressed: () {
+            Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);
+          },
+          icon: Icon(Icons.search),
+          label: Text("ค้นหา"),
+          backgroundColor: Constant.ORANGE_COLOR,
+        ),
+      ),
+    );
+  }
+
+  Widget homeCar() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('store').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(
+                  child: Text('Loading...',
+                      style: TextStyle(color: Colors.white)));
+            default:
+              return Container(
+                  child: GridView.builder(
+                      itemCount: snapshot.data.documents.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          child: Card(
+                            elevation: 5.0,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Image.network(
+                                snapshot.data.documents[index]['images'][0]
+                                    ['src'],
+                                width: 300,
+                                height: 300,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              child: CupertinoAlertDialog(
+                                title: Column(
+                                  children: <Widget>[
+                                    Text("GridView"),
+                                    Icon(
+                                      Icons.favorite,
+                                      color: Colors.green,
+                                    ),
+                                  ],
+                                ),
+                                content: Text("Selected Item $index"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("OK"))
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }));
+          }
+        });
+  }
+
+  Widget homeBike() {
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[],
         ),
       ),
     );
