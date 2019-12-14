@@ -35,7 +35,6 @@ class _State extends State<NameShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.provinceId);
     return Scaffold(
         backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(

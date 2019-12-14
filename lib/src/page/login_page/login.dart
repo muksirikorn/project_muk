@@ -23,9 +23,9 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image.asset(
-                          Constant.IMAGE_CAR,
-                          width: 400,
-                        ),
+                    Constant.IMAGE_CAR,
+                    width: 400,
+                  ),
                   buildUsernameTextFormField(),
                   buildPasswordTextFormField(),
                   buildLoginContainer(),
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Container buildLoginContainer() {
+  Widget buildLoginContainer() {
     return Container(
       margin: EdgeInsets.only(top: 32),
       width: double.infinity,
