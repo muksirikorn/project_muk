@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../page/location_detali_page/location_detail.dart';
 import '../../utils/constant.dart';
-import '../regiter_page/register.dart';
+import '../register_page/register.dart';
 
 class NameShopPage extends StatefulWidget {
   NameShopPage(
@@ -36,9 +36,9 @@ class _State extends State<NameShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constant.BK_COLOR,
+        backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
           title: Text(widget.provinceName),
           actions: <Widget>[
@@ -67,7 +67,7 @@ class _State extends State<NameShopPage> {
               case ConnectionState.waiting:
                 return Center(
                     child: Text('Loading...',
-                        style: TextStyle(color: Colors.white)));
+                        style: TextStyle(color: Colors.black)));
               default:
                 return ListView(
                   children:
@@ -77,8 +77,8 @@ class _State extends State<NameShopPage> {
                       margin:
                           EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: Color.fromRGBO(64, 75, 96, .9)),
+                        decoration: BoxDecoration(color: Colors.white30),
+                        // color: Color.fromRGBO(64, 75, 96, .9)),
                         child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 10.0),
@@ -94,21 +94,19 @@ class _State extends State<NameShopPage> {
                             title: Text(
                               document['name'],
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
-                            // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
                             subtitle: Row(
                               children: <Widget>[
                                 Flexible(
                                   child: Text(document['description'],
-                                      style: TextStyle(color: Colors.white)),
+                                      style: TextStyle(color: Colors.black)),
                                 )
                               ],
                             ),
                             trailing: Icon(Icons.keyboard_arrow_right,
-                                color: Colors.white, size: 30.0),
+                                color: Colors.black, size: 30.0),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -126,8 +124,8 @@ class _State extends State<NameShopPage> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text('ลบข้อมูลร้าน'),
-                                      content: Text('ต้องการลบข้อมูลร้าน?'),
+                                      title: Text('ต้องการลบข้อมูลร้าน?'),
+                                      content: Text('ลบข้อมูลร้าน'),
                                       actions: <Widget>[
                                         FlatButton(
                                             onPressed: () {

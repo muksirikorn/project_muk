@@ -10,7 +10,6 @@ class ProvincePage extends StatefulWidget {
 }
 
 class _ProvincePageState extends State<ProvincePage> {
-//  final databaseReference = Firestore.instance;
   @override
   void initState() {
     super.initState();
@@ -19,9 +18,9 @@ class _ProvincePageState extends State<ProvincePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constant.BK_COLOR,
+        backgroundColor: Constant.WHITE_COLOR,
         appBar: AppBar(
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
           title: Text(
             "เลือกจังหวัด",
@@ -38,7 +37,7 @@ class _ProvincePageState extends State<ProvincePage> {
                 return Center(
                     child: Text(
                   'Loading...',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black),
                 ));
               default:
                 return ListView(
@@ -47,11 +46,11 @@ class _ProvincePageState extends State<ProvincePage> {
                     return ListTile(
                       title: Text(
                         document['name'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       trailing: Icon(
                         Icons.keyboard_arrow_right,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onTap: () {
                         Navigator.push(

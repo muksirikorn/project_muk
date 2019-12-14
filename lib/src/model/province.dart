@@ -1,7 +1,14 @@
 class Province {
-  String provinceKey;
+  String documentID;
   String name;
-  int districtCount;
+  String objectID;
 
-  Province({this.provinceKey, this.name, this.districtCount});
+  Province({this.documentID, this.name, this.objectID});
+
+  factory Province.fromJSON(Map<String, dynamic> json) {
+    return Province(
+      documentID: json['documentID'],
+      name: json['name'],
+      objectID: json['objectID']);
+  }
 }
