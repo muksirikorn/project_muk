@@ -57,9 +57,9 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.BK_COLOR,
+      backgroundColor: Constant.GG_COLOR,
       appBar: AppBar(
-        backgroundColor: Constant.ORANGE_COLOR,
+        backgroundColor: Constant.GREEN_COLOR,
         centerTitle: true,
         title: Text(widget.documentName),
       ),
@@ -263,7 +263,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
             );
           }),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Constant.ORANGE_COLOR,
+        backgroundColor: Constant.GREEN_COLOR,
         onPressed: () {
           Navigator.push(
             context,

@@ -24,9 +24,9 @@ class _DistrictPageState extends State<DistrictPage> {
   Widget build(BuildContext context) {
     print(widget.provinceId);
     return Scaffold(
-        backgroundColor: Constant.BK_COLOR,
+        backgroundColor: Constant.WHITE_COLOR,
         appBar: AppBar(
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
           title: Text(widget.provinceName),
         ),
@@ -42,7 +42,7 @@ class _DistrictPageState extends State<DistrictPage> {
               case ConnectionState.waiting:
                 return Center(
                     child: Text('Loading...',
-                        style: TextStyle(color: Colors.white)));
+                        style: TextStyle(color: Colors.black)));
               default:
                 return ListView(
                   children:
@@ -50,11 +50,11 @@ class _DistrictPageState extends State<DistrictPage> {
                     return ListTile(
                       title: Text(
                         document['name'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       trailing: Icon(
                         Icons.keyboard_arrow_right,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onTap: () {
                         Navigator.push(

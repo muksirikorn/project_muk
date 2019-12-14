@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: RaisedButton(
         color: Constant.PRIMARY_COLOR,
-        splashColor: Colors.orange,
+        splashColor: Colors.green,
         child: Text(
           "Login",
           style: TextStyle(
@@ -77,8 +77,8 @@ class _LoginPageState extends State<LoginPage> {
           icon: Icon(
             Icons.person,
           ),
-          hintText: "example@gmail.com",
-          labelText: "Email"),
+          // hintText: "example@gmail.com",
+          labelText: "Username"),
     );
   }
 

@@ -88,11 +88,11 @@ class _RegisterPageState extends State<RegisterPage> {
     print(widget.provinceId);
     print(widget.districtId);
     return Scaffold(
-        backgroundColor: Constant.BK_COLOR,
+        backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
-          title: Text('Add new shop'),
+          title: Text('เพิ่มร้านซ่อมรถ'),
         ),
         body: Form(
           key: _formKey,
@@ -225,7 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 50,
                           width: double.infinity,
                           child: RaisedButton(
-                            color: Color(0xFFD56343),
+                            color: Color(0xFF00C853),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),

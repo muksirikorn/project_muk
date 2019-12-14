@@ -5,7 +5,7 @@ import '../src/page/location_detali_page/location_detail.dart';
 import '../src/page/login_page/login.dart';
 import '../src/page/name_shop_page/nameshop.dart';
 import '../src/page/province_page/province.dart';
-import '../src/page/regiter_page/register.dart';
+import '../src/page/register_page/register.dart';
 import '../src/themes/app_themes.dart';
 import '../src/utils/constant.dart';
 

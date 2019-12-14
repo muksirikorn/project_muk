@@ -14,21 +14,22 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Constant.BK_COLOR, //set color
+        backgroundColor: Constant.WHITE_COLOR, //set color
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.directions_car)),
-              Tab(icon: Icon(Icons.directions_bike)),
+              Tab(icon: Icon(Icons.directions_car,color: Colors.black)),
+              Tab(icon: Icon(Icons.directions_bike,color: Colors.black)),
             ],
           ),
           automaticallyImplyLeading: false,
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
           title: Text('ร้านซ่อมรถ'),
           actions: <Widget>[
             RaisedButton(
-              color: Constant.ORANGE_COLOR,
-              child: const Icon(Icons.exit_to_app),
+              color: Constant.GREEN_COLOR,
+              child: const Icon(Icons.perm_identity,
+              color: Colors.white,),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -46,9 +47,9 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.pushNamed(context, Constant.PROVINCE_ROUTE);
           },
-          icon: Icon(Icons.search),
+          icon: Icon(Icons.search,color: Colors.black,),
           label: Text("ค้นหา"),
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
         ),
       ),
     );
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             case ConnectionState.waiting:
               return Center(
                   child: Text('Loading...',
-                      style: TextStyle(color: Colors.white)));
+                      style: TextStyle(color: Colors.black)));
             default:
               return Container(
                   child: GridView.builder(
@@ -85,31 +86,6 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          onTap: () {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              child: CupertinoAlertDialog(
-                                title: Column(
-                                  children: <Widget>[
-                                    Text("GridView"),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: Colors.green,
-                                    ),
-                                  ],
-                                ),
-                                content: Text("Selected Item $index"),
-                                actions: <Widget>[
-                                  FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("OK"))
-                                ],
-                              ),
-                            );
-                          },
                         );
                       }));
           }

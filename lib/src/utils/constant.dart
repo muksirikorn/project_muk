@@ -18,6 +18,11 @@ class Constant {
   static const Color ORANGE_COLOR = Color(0xFFD56343);
   static const Color B_COLOR = Color(0xFFC2EAF6);
   static const Color BK_COLOR = Color(0xFF686A73);
+  static const Color GG_COLOR = Color(0xFFB9F6CA);
+  static const Color G_COLOR = Color(0xFF4CAF50);
+  static const Color WHITE_COLOR = Color(0xFFFFFFFF);
+  static const Color BLACK_COLOR = Color(0xFF000000);
+  static const Color GREEN_COLOR = Color(0xFF00C853);
 
   //font
   static const String PROMPT_REGULAR = 'Prompt_Regular';

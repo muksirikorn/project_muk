@@ -102,11 +102,11 @@ class _UpdatePageState extends State<UpdatePage> {
     print(widget.provinceId);
     print(widget.districtId);
     return Scaffold(
-        backgroundColor: Constant.BK_COLOR,
+        backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(
-          backgroundColor: Constant.ORANGE_COLOR,
+          backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
-          title: Text('Update shop'),
+          title: Text('อัพเดทร้านซ่อมรถ'),
         ),
         body: StreamBuilder(
             stream: Firestore.instance
@@ -290,7 +290,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                 height: 50,
                                 width: double.infinity,
                                 child: RaisedButton(
-                                  color: Color(0xFFD56343),
+                                  color: Color(0xFF4CAF50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: new BorderRadius.circular(5),
                                   ),
