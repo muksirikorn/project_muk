@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:project_muk/src/page/location_detali_page/location_detail.dart';
-import 'package:project_muk/src/utils/constant.dart';
+import '../../page/location_detali_page/location_detail.dart';
+import '../../utils/constant.dart';
 import '../regiter_page/register.dart';
 
 class NameShopPage extends StatefulWidget {

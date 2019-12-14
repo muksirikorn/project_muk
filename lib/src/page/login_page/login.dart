@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_muk/src/utils/constant.dart';
-import 'package:project_muk/src/utils/custom_simple_dialog.dart';
+import '../../utils/constant.dart';
+import '../../utils/custom_simple_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildPasswordTextFormField() {
     return TextFormField(
-      onSaved: (String value) {},
+      onSaved: (value) {},
       obscureText: true,
       decoration: InputDecoration(
           icon: Icon(
@@ -72,12 +72,11 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildUsernameTextFormField() {
     return TextFormField(
-      onSaved: (String value) {},
+      onSaved: (value) {},
       decoration: InputDecoration(
           icon: Icon(
             Icons.person,
           ),
-          hintText: "example@gmail.com",
           labelText: "Email"),
     );
   }

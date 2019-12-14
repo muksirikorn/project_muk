@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project_muk/src/page/district_page/district.dart';
-import 'package:project_muk/src/utils/constant.dart';
+import '../../page/district_page/district.dart';
+import '../../utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProvincePage extends StatefulWidget {
