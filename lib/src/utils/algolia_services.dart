@@ -1,12 +1,11 @@
 import 'package:algolia/algolia.dart';
 import 'package:project_muk/src/model/province.dart';
 
-class  AlogoliaService {
+class AlogoliaService {
   AlogoliaService._privateConstructor();
 
   static final AlogoliaService instance = AlogoliaService._privateConstructor();
   static final algolisServices = AlogoliaService.instance;
-
 
   final Algolia _algolia = Algolia.init(
     applicationId: 'AFJN3ROVJZ',
@@ -17,7 +16,9 @@ class  AlogoliaService {
   Future<List<Province>> performProvinceSearch({text: String}) async {
     final query = _provinces.search(text);
     final snap = await query.getObjects();
-    final provinces = snap.hits.map((provinces) => Province.fromJSON(provinces.data)).toList();
+    final provinces = snap.hits
+        .map((provinces) => Province.fromJSON(provinces.data))
+        .toList();
     return provinces;
   }
 }

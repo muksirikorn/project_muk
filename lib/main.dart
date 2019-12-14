@@ -4,7 +4,6 @@ import './src/page/home_page/home.dart';
 import './src/page/location_detali_page/location_detail.dart';
 import './src/page/login_page/login.dart';
 import './src/page/name_shop_page/nameshop.dart';
-import './src/page/province_page/province.dart';
 import './src/page/register_page/register.dart';
 import './src/themes/app_themes.dart';
 import './src/utils/constant.dart';
@@ -16,7 +15,6 @@ void main() {
 class Home extends StatelessWidget {
   final _route = <String, WidgetBuilder>{
     Constant.HOME_ROUTE: (context) => HomePage(),
-    Constant.PROVINCE_ROUTE: (context) => ProvincePage(),
     Constant.DISTRICT_ROUTE: (context) => DistrictPage(),
     Constant.NAME_SHOP_ROUTE: (context) => NameShopPage(),
     Constant.LOCATION_DETAIL_ROUTE: (context) => LocationDetailPage(),
