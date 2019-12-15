@@ -190,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         TextFormField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'รุณาป้อนลองติจูด',
+                            hintText: 'กรุณาป้อนลองติจูด',
                             labelText: 'ลองติจูด',
                             prefixIcon: const Icon(
                               Icons.location_on,
