@@ -33,6 +33,7 @@ dependencies:
   firebase_storage: ^3.0.6
   algolia: ^0.1.7
   firebase_auth: ^0.14.0+9
+  location: ^2.3.5
 
 dev_dependencies:
   flutter_test:
