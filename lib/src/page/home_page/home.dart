@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget dataView(String type) {
         return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('store').where("type", isEqualTo: type).snapshots(),
+        stream: Firestore.instance.collection('image').where("type", isEqualTo: type).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {

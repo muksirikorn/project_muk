@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import '../../utils/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../update_page/update.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationDetailPage extends StatefulWidget {
   LocationDetailPage(
@@ -26,6 +28,12 @@ class LocationDetailPage extends StatefulWidget {
 }
 
 class _LocationDetailPageState extends State<LocationDetailPage> {
+  GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -132,26 +140,19 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _openGoogleMap(
-                                          lat: document['location']['lat'],
-                                          lng: document['location']['lng']);
-                                    },
-                                    child: Row(
-                                      children: <Widget>[
-                                        Icon(Icons.home),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                              document['address']['detail'],
-                                              style: TextStyle(
-                                                  color: Colors.black)),
-                                        ),
-                                      ],
-                                    ),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(Icons.home),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                            document['address']['detail'],
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ),
+                                    ],
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -255,6 +256,43 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      children: <Widget>[
+                        GestureDetector(
+                            onTap: () {
+                              _openGoogleMap(
+                                  lat: document['location']['lat'],
+                                  lng: document['location']['lng']);
+                            },
+                            child: Container(
+                              height: 300,
+                              child: GoogleMap(
+                                mapType: MapType.normal,
+                                initialCameraPosition: CameraPosition(
+                                  target: LatLng(
+                                      double.parse(document['location']['lat']),
+                                      double.parse(
+                                          document['location']['lng'])),
+                                  zoom: 15,
+                                ),
+                                onMapCreated: _onMapCreated,
+                                markers: {
+                                  Marker(
+                                    markerId: MarkerId("1"),
+                                    position: LatLng(
+                                        double.parse(
+                                            document['location']['lat']),
+                                        double.parse(
+                                            document['location']['lng'])),
+                                  )
+                                },
+                              ),
+                            ))
                       ],
                     ),
                   ),

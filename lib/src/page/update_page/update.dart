@@ -11,6 +11,7 @@ import '../../utils/constant.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:location/location.dart';
 
 class UpdatePage extends StatefulWidget {
   UpdatePage({Key key, this.docID, this.provinceId, this.districtId})
