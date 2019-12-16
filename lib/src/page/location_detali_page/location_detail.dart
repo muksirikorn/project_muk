@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import '../../utils/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../update_page/update.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationDetailPage extends StatefulWidget {
   LocationDetailPage(
@@ -26,6 +28,12 @@ class LocationDetailPage extends StatefulWidget {
 }
 
 class _LocationDetailPageState extends State<LocationDetailPage> {
+  GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +70,22 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
         backgroundColor: Constant.GREEN_COLOR,
         centerTitle: true,
         title: Text(widget.documentName),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UpdatePage(
+                          docID: widget.docID,
+                          provinceId: widget.provinceId,
+                          districtId: widget.districtId,
+                        )),
+              );
+            },
+            child: Icon(Icons.edit, color: Colors.white),
+          )
+        ],
       ),
       body: StreamBuilder(
           stream: Firestore.instance
@@ -262,25 +286,36 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height: 300,
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(document['location']['lat'],
+                                  document['location']['lng']),
+                              zoom: 15,
+                            ),
+                            onMapCreated: _onMapCreated,
+                            markers: {
+                              Marker(
+                                markerId: MarkerId("1"),
+                                position: LatLng(document['location']['lat'],
+                                    document['location']['lng']),
+                              )
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             );
           }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Constant.GREEN_COLOR,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => UpdatePage(
-                      docID: widget.docID,
-                      provinceId: widget.provinceId,
-                      districtId: widget.districtId,
-                    )),
-          );
-        },
-        child: Icon(Icons.edit),
-      ),
     );
   }
 }
