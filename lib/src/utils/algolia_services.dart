@@ -1,5 +1,5 @@
 import 'package:algolia/algolia.dart';
-import 'package:project_muk/src/model/province.dart';
+import '../model/province.dart';
 
 class AlogoliaService {
   AlogoliaService._privateConstructor();

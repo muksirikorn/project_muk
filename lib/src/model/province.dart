@@ -7,8 +7,8 @@ class Province {
 
   factory Province.fromJSON(Map<String, dynamic> json) {
     return Province(
-      documentID: json['documentID'],
-      name: json['name'],
-      objectID: json['objectID']);
+        documentID: json['documentID'],
+        name: json['name'],
+        objectID: json['objectID']);
   }
 }
