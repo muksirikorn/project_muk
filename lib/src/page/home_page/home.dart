@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:project_muk/src/model/province.dart';
-import 'package:project_muk/src/utils/constant.dart';
+import '../../model/province.dart';
+import '../../utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../page/district_page/district.dart';
 import '../../utils/algolia_services.dart';
+import '../../utils/auth_services.dart';
 
 class HomePage extends StatefulWidget {
+  HomePage({Key key, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
+
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -29,16 +45,9 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Constant.GREEN_COLOR,
           title: Text('ร้านซ่อมรถ'),
           actions: <Widget>[
-            RaisedButton(
-              color: Constant.GREEN_COLOR,
-              child: const Icon(
-                Icons.perm_identity,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
+            FlatButton(
+            child: Icon(Icons.exit_to_app, color: Colors.white),
+            onPressed: signOut)
           ],
         ),
         body: TabBarView(
@@ -56,16 +65,17 @@ class _HomePageState extends State<HomePage> {
             Icons.search,
             color: Colors.black,
           ),
-          label: Text("ค้นหา"),
+          label: Text("ค้นหา",
+           style: TextStyle(color: Colors.black)),
           backgroundColor: Constant.GREEN_COLOR,
         ),
       ),
     );
   }
 
-  Widget homeCar() {
-    return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('store').snapshots(),
+  Widget dataView(String type) {
+        return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('store').where("type", isEqualTo: type).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -100,16 +110,12 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  Widget homeCar() {
+    return dataView('car');
+  }
+
   Widget homeBike() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
-        ),
-      ),
-    );
+    return dataView('motorbike');
   }
 }
 
@@ -154,7 +160,7 @@ class DataSearch extends SearchDelegate<String> {
               child: Center(
                   child: GestureDetector(
                 child: Card(
-                  color: Colors.lightGreen[200],
+                   color: Colors.yellow[200],
                   child: Column(
                     children: <Widget>[
                       Row(children: <Widget>[

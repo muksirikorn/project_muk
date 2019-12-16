@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './src/root.dart';
 import './src/page/district_page/district.dart';
 import './src/page/home_page/home.dart';
 import './src/page/location_detali_page/location_detail.dart';
@@ -7,6 +8,7 @@ import './src/page/name_shop_page/nameshop.dart';
 import './src/page/register_page/register.dart';
 import './src/themes/app_themes.dart';
 import './src/utils/constant.dart';
+import './src/utils/auth_services.dart';
 
 void main() {
   return runApp(Home());
@@ -29,7 +31,7 @@ class Home extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "ค้นหาร้านซ่อมรถ",
       routes: _route,
-      home: LoginPage(),
+      home: Root(auth: AuthServices()),
     );
   }
 }
