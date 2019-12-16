@@ -8,8 +8,8 @@ class Insert {
   Contact contact;
   String description;
   Operation operation;
-  String lat;
-  String lng;
+  double lat;
+  double lng;
   String src;
 
   Insert(
