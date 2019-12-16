@@ -46,8 +46,8 @@ class _HomePageState extends State<HomePage> {
           title: Text('ร้านซ่อมรถ'),
           actions: <Widget>[
             FlatButton(
-            child: Icon(Icons.exit_to_app, color: Colors.white),
-            onPressed: signOut)
+                child: Icon(Icons.exit_to_app, color: Colors.white),
+                onPressed: signOut)
           ],
         ),
         body: TabBarView(
@@ -65,8 +65,7 @@ class _HomePageState extends State<HomePage> {
             Icons.search,
             color: Colors.black,
           ),
-          label: Text("ค้นหา",
-           style: TextStyle(color: Colors.black)),
+          label: Text("ค้นหา", style: TextStyle(color: Colors.black)),
           backgroundColor: Constant.GREEN_COLOR,
         ),
       ),
@@ -74,8 +73,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget dataView(String type) {
-        return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('image').where("type", isEqualTo: type).snapshots(),
+    return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('image')
+            .where("type", isEqualTo: type)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -135,7 +137,6 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    // Leading icon on the left of the app bar
     return IconButton(
         icon: AnimatedIcon(
             icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
@@ -155,12 +156,12 @@ class DataSearch extends SearchDelegate<String> {
       future: algoliaService.performProvinceSearch(text: query),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final foods = snapshot.data.map((province) {
+          final provinces = snapshot.data.map((province) {
             return Container(
               child: Center(
                   child: GestureDetector(
                 child: Card(
-                   color: Colors.yellow[200],
+                  color: Colors.yellow[200],
                   child: Column(
                     children: <Widget>[
                       Row(children: <Widget>[
@@ -187,7 +188,7 @@ class DataSearch extends SearchDelegate<String> {
             );
           }).toList();
 
-          return ListView(children: foods);
+          return ListView(children: provinces);
         } else if (snapshot.hasError) {
           return Center(
             child: Text("${snapshot.error.toString()}"),

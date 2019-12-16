@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +55,68 @@ class _UpdatePageState extends State<UpdatePage> {
   Contact newContact = new Contact();
   Address newAddress = new Address();
 
+  LocationData _startLocation;
+  LocationData _currentLocation;
+
+  StreamSubscription<LocationData> _locationSubscription;
+
+  Location _locationService = Location();
+  bool _permission = false;
+  String error;
+
+  bool currentWidget = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initPlatformState();
+  }
+
+  _initPlatformState() async {
+    await _locationService.changeSettings(
+        accuracy: LocationAccuracy.HIGH, interval: 1000);
+
+    LocationData location;
+    try {
+      bool serviceStatus = await _locationService.serviceEnabled();
+      print("Service status: $serviceStatus");
+      if (serviceStatus) {
+        _permission = await _locationService.requestPermission();
+        print("Permission: $_permission");
+        if (_permission) {
+          location = await _locationService.getLocation();
+
+          _locationSubscription = _locationService
+              .onLocationChanged()
+              .listen((LocationData result) async {
+            setState(() {
+              _currentLocation = result;
+            });
+          });
+          print(_currentLocation.latitude);
+        }
+      } else {
+        bool serviceStatusResult = await _locationService.requestService();
+        print("Service status activated after request: $serviceStatusResult");
+        if (serviceStatusResult) {
+          _initPlatformState();
+        }
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = e.message;
+      } else if (e.code == 'SERVICE_STATUS_ERROR') {
+        error = e.message;
+      }
+      location = null;
+    }
+
+    setState(() {
+      _startLocation = location;
+    });
+  }
+
   Future<bool> _submitForm(String provinceId, String districtId) async {
     final FormState form = _formKey.currentState;
     form.save();
@@ -74,8 +138,8 @@ class _UpdatePageState extends State<UpdatePage> {
       ],
       "contact": {"mobilePhone": newContact.mobilePhoneNumber},
       "location": {
-        "lat": "",
-        "lng": "",
+        "lat": _currentLocation.latitude,
+        "lng": _currentLocation.longitude,
       },
       "description": newInsert.description,
       "operation": {
@@ -222,29 +286,37 @@ class _UpdatePageState extends State<UpdatePage> {
                                 onChanged: (t) => setState(() => closetime = t),
                               ),
                               buildSizedBox(),
-                              TextFormField(
-                                initialValue: document['location']['lat'],
-                                decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(),
-                                  hintText: 'กรุณาป้อนละติจูด',
-                                  labelText: 'ละติจูด',
-                                  prefixIcon: const Icon(
-                                    Icons.location_on,
-                                  ),
-                                ),
-                              ),
-                              buildSizedBox(),
-                              TextFormField(
-                                initialValue: document['location']['lng'],
-                                decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(),
-                                  hintText: 'กรุณาป้อนลองติจูด',
-                                  labelText: 'ลองติจูด',
-                                  prefixIcon: const Icon(
-                                    Icons.location_on,
-                                  ),
-                                ),
-                              ),
+                              RaisedButton(
+                                child: Text('เรียกตำแหน่งที่ตั้ง',
+                                    style: TextStyle(
+                                        fontSize: 28)),
+                                color: Colors.orange[200],
+                                onPressed: () {
+                                  _initPlatformState();
+                              }),
+                              // TextFormField(
+                              //   initialValue: document['location']['lat'],
+                              //   decoration: new InputDecoration(
+                              //     border: new OutlineInputBorder(),
+                              //     hintText: 'กรุณาป้อนละติจูด',
+                              //     labelText: 'ละติจูด',
+                              //     prefixIcon: const Icon(
+                              //       Icons.location_on,
+                              //     ),
+                              //   ),
+                              // ),
+                              // buildSizedBox(),
+                              // TextFormField(
+                              //   initialValue: document['location']['lng'],
+                              //   decoration: new InputDecoration(
+                              //     border: new OutlineInputBorder(),
+                              //     hintText: 'กรุณาป้อนลองติจูด',
+                              //     labelText: 'ลองติจูด',
+                              //     prefixIcon: const Icon(
+                              //       Icons.location_on,
+                              //     ),
+                              //   ),
+                              // ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,

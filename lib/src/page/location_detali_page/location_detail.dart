@@ -47,7 +47,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     }
   }
 
-  Future _openGoogleMap({String lat, String lng}) async {
+  Future _openGoogleExternalMap({String lat, String lng}) async {
     bool launchable =
         await canLaunch('https://maps.google.com/?z=12&q=$lat,$lng');
     if (launchable) {
@@ -70,6 +70,22 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
         backgroundColor: Constant.GREEN_COLOR,
         centerTitle: true,
         title: Text(widget.documentName),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UpdatePage(
+                          docID: widget.docID,
+                          provinceId: widget.provinceId,
+                          districtId: widget.districtId,
+                        )),
+              );
+            },
+            child: Icon(Icons.edit, color: Colors.white),
+          )
+        ],
       ),
       body: StreamBuilder(
           stream: Firestore.instance
@@ -140,19 +156,30 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(Icons.home),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Flexible(
-                                        child: Text(
+                                  GestureDetector(
+                                    onTap: () {
+                                      _openGoogleExternalMap(
+                                          lat: document['location']['lat']
+                                              .toString(),
+                                          lng: document['location']['lng']
+                                              .toString());
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.home),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Flexible(
+                                          child: Text(
                                             document['address']['detail'],
                                             style:
-                                                TextStyle(color: Colors.black)),
-                                      ),
-                                    ],
+                                                TextStyle(color: Colors.black),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -263,36 +290,25 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                     padding: const EdgeInsets.all(15),
                     child: Column(
                       children: <Widget>[
-                        GestureDetector(
-                            onTap: () {
-                              _openGoogleMap(
-                                  lat: document['location']['lat'],
-                                  lng: document['location']['lng']);
+                        Container(
+                          height: 300,
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(document['location']['lat'],
+                                  document['location']['lng']),
+                              zoom: 15,
+                            ),
+                            onMapCreated: _onMapCreated,
+                            markers: {
+                              Marker(
+                                markerId: MarkerId("1"),
+                                position: LatLng(document['location']['lat'],
+                                    document['location']['lng']),
+                              )
                             },
-                            child: Container(
-                              height: 300,
-                              child: GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition: CameraPosition(
-                                  target: LatLng(
-                                      double.parse(document['location']['lat']),
-                                      double.parse(
-                                          document['location']['lng'])),
-                                  zoom: 15,
-                                ),
-                                onMapCreated: _onMapCreated,
-                                markers: {
-                                  Marker(
-                                    markerId: MarkerId("1"),
-                                    position: LatLng(
-                                        double.parse(
-                                            document['location']['lat']),
-                                        double.parse(
-                                            document['location']['lng'])),
-                                  )
-                                },
-                              ),
-                            ))
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -300,21 +316,6 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
               ),
             );
           }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Constant.GREEN_COLOR,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => UpdatePage(
-                      docID: widget.docID,
-                      provinceId: widget.provinceId,
-                      districtId: widget.districtId,
-                    )),
-          );
-        },
-        child: Icon(Icons.edit),
-      ),
     );
   }
 }
