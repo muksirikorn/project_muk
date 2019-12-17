@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../page/location_detali_page/location_detail.dart';
-import '../../utils/constant.dart';
-import '../register_page/register.dart';
+import 'shop_detail.dart';
+import '../../services/constant.dart';
+import 'new_shop_page.dart';
 
-class NameShopPage extends StatefulWidget {
-  NameShopPage(
+class ShopsPage extends StatefulWidget {
+  ShopsPage(
       {Key key,
       this.provinceId,
       this.provinceName,
@@ -20,10 +20,10 @@ class NameShopPage extends StatefulWidget {
   final String districtId;
 
   @override
-  _State createState() => _State();
+  _ShopsPageState createState() => _ShopsPageState();
 }
 
-class _State extends State<NameShopPage> {
+class _ShopsPageState extends State<ShopsPage> {
   @override
   void initState() {
     super.initState();
@@ -46,7 +46,7 @@ class _State extends State<NameShopPage> {
               icon: Icon(Icons.add),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return RegisterPage(
+                  return NewShopPage(
                     provinceId: widget.provinceId,
                     districtId: widget.districtId,
                   );
@@ -62,7 +62,8 @@ class _State extends State<NameShopPage> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+            if (snapshot.hasError)
+              return Center(child: Text('Error: ${snapshot.error}'));
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Center(
@@ -111,7 +112,7 @@ class _State extends State<NameShopPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LocationDetailPage(
+                                    builder: (context) => ShopDetailPage(
                                           docID: document.documentID,
                                           documentName: document['name'],
                                           provinceId: widget.provinceId,

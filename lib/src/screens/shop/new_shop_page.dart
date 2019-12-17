@@ -6,29 +6,32 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
-import '../../model/address.dart';
-import '../../model/contact.dart';
-import '../../model/insert.dart';
-import '../home_page/home.dart';
-import '../../utils/constant.dart';
-import '../../utils/image_service.dart';
 import 'package:location/location.dart';
 
-class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key, this.provinceId, this.districtId}) : super(key: key);
+import '../../models/store.dart';
+import '../../models/address.dart';
+import '../../models/contact.dart';
+
+import '../../services/constant.dart';
+import '../../services/image_service.dart';
+
+import '../home.dart';
+import '../../components/shared_components.dart';
+
+class NewShopPage extends StatefulWidget {
+  NewShopPage({Key key, this.provinceId, this.districtId}) : super(key: key);
 
   final String provinceId;
 
   final String districtId;
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _NewShopPageState createState() => _NewShopPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _NewShopPageState extends State<NewShopPage> {
   File _image;
 
   Future getImageFromCam() async {
-    // for camera
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       _image = image;
@@ -36,11 +39,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  final timeFormat = DateFormat("h:mm a");
+  final timeFormat = DateFormat.Hm();
   DateTime date;
   TimeOfDay opentime, closetime;
 
-  Insert newInsert = new Insert();
+  Shop newShop = new Shop();
   Contact newContact = new Contact();
   Address newAddress = new Address();
 
@@ -54,6 +57,8 @@ class _RegisterPageState extends State<RegisterPage> {
   String error;
 
   bool currentWidget = true;
+
+  int _radioValue1 = -1;
 
   @override
   void initState() {
@@ -106,14 +111,30 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  void _handleRadioValueChange1(int value) {
+    setState(() {
+      _radioValue1 = value;
+
+      switch (_radioValue1) {
+        case 0:
+          newShop.type = 'car';
+          print('select car');
+          break;
+        case 1:
+          newShop.type = 'bike';
+          print('select bike');
+          break;
+      }
+    });
+  }
+
   Future<bool> _submitForm(String provinceId, String districtId) async {
     final FormState form = _formKey.currentState;
     form.save();
-    //upload image
     String imgUrl = await onImageUploading(_image);
 
     await Firestore.instance.collection('store').document().setData({
-      "name": newInsert.name,
+      "name": newShop.name,
       "address": {
         "detail": newAddress.detail,
         "provicne_id": provinceId,
@@ -127,22 +148,23 @@ class _RegisterPageState extends State<RegisterPage> {
         "lat": _currentLocation.latitude,
         "lng": _currentLocation.longitude,
       },
-      "description": newInsert.description,
+      "description": newShop.description,
+      "type": newShop.type,
       "operation": {
         "open": opentime.format(context),
         "close": closetime.format(context)
       },
     });
 
-    print('Name: ${newInsert.name}');
+    print('Name: ${newShop.name}');
     print('Address: ${newAddress.detail}');
     print('MobilePhoneNumber: ${newContact.mobilePhoneNumber}');
-    print('Description: ${newInsert.description}');
+    print('Description: ${newShop.description}');
     print(opentime.format(context));
     print(closetime.format(context));
-    print('Lat: ${newInsert.lat}');
-    print('Lng: ${newInsert.lng}');
-    print('Src: ${newInsert.src}');
+    print('Lat: ${_currentLocation.latitude}');
+    print('Lng: ${_currentLocation.longitude}');
+    print('Src: ${imgUrl}');
 
     print('done');
     return true;
@@ -179,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               Icons.store_mall_directory,
                             ),
                           ),
-                          onSaved: (val) => newInsert.name = val,
+                          onSaved: (val) => newShop.name = val,
                         ),
                         buildSizedBox(),
                         TextFormField(
@@ -216,8 +238,33 @@ class _RegisterPageState extends State<RegisterPage> {
                               Icons.library_books,
                             ),
                           ),
-                          onSaved: (val) => newInsert.description = val,
+                          onSaved: (val) => newShop.description = val,
                         ),
+                        buildSizedBox(),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Radio(
+                                value: 0,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              Text(
+                                'อู่รถยนต์',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                              Radio(
+                                value: 1,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              Text(
+                                'อู่มอเตอร์ไซด์',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ]),
                         buildSizedBox(),
                         TimePickerFormField(
                           format: timeFormat,
@@ -243,8 +290,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         buildSizedBox(),
                         RaisedButton(
                             child: Text('เรียกตำแหน่งที่ตั้ง',
-                                style: TextStyle(
-                                    fontSize: 28)),
+                                style: TextStyle(fontSize: 28)),
                             color: Colors.orange[200],
                             onPressed: () {
                               _initPlatformState();
@@ -306,11 +352,5 @@ class _RegisterPageState extends State<RegisterPage> {
             ],
           ),
         ));
-  }
-
-  SizedBox buildSizedBox() {
-    return SizedBox(
-      height: 13,
-    );
   }
 }

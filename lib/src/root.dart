@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import './utils/auth_services.dart';
-import './page/login_page/login.dart';
-import './page/home_page/home.dart';
+import './services/auth_services.dart';
+import './screens/login.dart';
+import './screens/home.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
@@ -70,7 +70,7 @@ class _RootState extends State<Root> {
         return buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return LoginPage (
+        return LoginPage(
           auth: widget.auth,
           loginCallback: loginCallback,
         );

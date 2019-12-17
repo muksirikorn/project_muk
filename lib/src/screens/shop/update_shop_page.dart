@@ -5,53 +5,45 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../model/address.dart';
-import '../../model/contact.dart';
-import '../../model/insert.dart';
-import '../../page/home_page/home.dart';
-import '../../utils/constant.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
-import 'package:uuid/uuid.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:location/location.dart';
 
-class UpdatePage extends StatefulWidget {
-  UpdatePage({Key key, this.docID, this.provinceId, this.districtId})
+import '../../models/store.dart';
+import '../../models/address.dart';
+import '../../models/contact.dart';
+import '../../services/constant.dart';
+import '../../services/image_service.dart';
+
+import '../home.dart';
+import '../../components/shared_components.dart';
+
+class UpdateShopPage extends StatefulWidget {
+  UpdateShopPage({Key key, this.docID, this.provinceId, this.districtId})
       : super(key: key);
 
   final String docID;
   final String provinceId;
   final String districtId;
   @override
-  _UpdatePageState createState() => _UpdatePageState();
+  _UpdateShopPageState createState() => _UpdateShopPageState();
 }
 
-class _UpdatePageState extends State<UpdatePage> {
+class _UpdateShopPageState extends State<UpdateShopPage> {
   File _image;
 
   Future getImageFromCam() async {
-    // for camera
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       _image = image;
     });
   }
 
-  Future<String> onImageUploading(File imagePath) async {
-    final StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('${Uuid().v1()}.png');
-    final StorageUploadTask task = firebaseStorageRef.putFile(imagePath);
-    StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
-    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    return downloadUrl;
-  }
-
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  final timeFormat = DateFormat("h:mm a");
+  final timeFormat = DateFormat.Hm();
   DateTime date;
   TimeOfDay opentime, closetime;
 
-  Insert newInsert = new Insert();
+  Shop newShop = new Shop();
   Contact newContact = new Contact();
   Address newAddress = new Address();
 
@@ -65,6 +57,8 @@ class _UpdatePageState extends State<UpdatePage> {
   String error;
 
   bool currentWidget = true;
+
+  int _radioValue1 = -1;
 
   @override
   void initState() {
@@ -94,7 +88,6 @@ class _UpdatePageState extends State<UpdatePage> {
               _currentLocation = result;
             });
           });
-          print(_currentLocation.latitude);
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
@@ -127,7 +120,7 @@ class _UpdatePageState extends State<UpdatePage> {
         .collection('store')
         .document(widget.docID)
         .updateData({
-      "name": newInsert.name,
+      "name": newShop.name,
       "address": {
         "detail": newAddress.detail,
         "provicne_id": provinceId,
@@ -141,25 +134,42 @@ class _UpdatePageState extends State<UpdatePage> {
         "lat": _currentLocation.latitude,
         "lng": _currentLocation.longitude,
       },
-      "description": newInsert.description,
+      "description": newShop.description,
+      "type": newShop.type,
       "operation": {
         "open": opentime.format(context),
         "close": closetime.format(context)
       },
     });
 
-    print('Name: ${newInsert.name}');
+    print('Name: ${newShop.name}');
     print('Address: ${newAddress.detail}');
     print('MobilePhoneNumber: ${newContact.mobilePhoneNumber}');
-    print('Description: ${newInsert.description}');
+    print('Description: ${newShop.description}');
     print(opentime.format(context));
     print(closetime.format(context));
-    print('Lat: ${newInsert.lat}');
-    print('Lng: ${newInsert.lng}');
-    print('Src: ${newInsert.src}');
+    print('Lat: ${_currentLocation.latitude}');
+    print('Lng: ${_currentLocation.longitude}');
+    print('Src: ${imgUrl}');
 
-    print('done');
     return true;
+  }
+
+  void _handleRadioValueChange1(int value) {
+    setState(() {
+      _radioValue1 = value;
+
+      switch (_radioValue1) {
+        case 0:
+          newShop.type = 'car';
+          print('select car');
+          break;
+        case 1:
+          newShop.type = 'bike';
+          print('select bike');
+          break;
+      }
+    });
   }
 
   @override
@@ -209,23 +219,23 @@ class _UpdatePageState extends State<UpdatePage> {
                             children: <Widget>[
                               TextFormField(
                                 initialValue: document['name'],
-                                decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
                                   hintText: 'กรุณาป้อนชื่อร้าน',
                                   labelText: 'ชื่อร้าน',
                                   prefixIcon: const Icon(
                                     Icons.store_mall_directory,
                                   ),
                                 ),
-                                onSaved: (val) => newInsert.name = val,
+                                onSaved: (val) => newShop.name = val,
                               ),
                               buildSizedBox(),
                               TextFormField(
                                 initialValue: document['address']['detail'],
-                                decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
                                   hintText: 'กรุณาป้อนที่อยู่',
-                                  labelText: 'ที่อยู่',
+                                  labelText: '���อยู่',
                                   prefixIcon: const Icon(
                                     Icons.home,
                                   ),
@@ -236,8 +246,8 @@ class _UpdatePageState extends State<UpdatePage> {
                               TextFormField(
                                 initialValue: document['contact']
                                     ['mobilePhone'],
-                                decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
                                   hintText: 'กรุณาป้อนเบอร์โทรศัพท์',
                                   labelText: 'เบอร์โทรศัพท์',
                                   prefixIcon: const Icon(
@@ -251,16 +261,41 @@ class _UpdatePageState extends State<UpdatePage> {
                               buildSizedBox(),
                               TextFormField(
                                 initialValue: document['description'],
-                                decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
                                   hintText: 'กรุณาป้อนรายละเ���ยดร้าน',
                                   labelText: 'รายละเอียดร้าน',
                                   prefixIcon: const Icon(
                                     Icons.library_books,
                                   ),
                                 ),
-                                onSaved: (val) => newInsert.description = val,
+                                onSaved: (val) => newShop.description = val,
                               ),
+                              buildSizedBox(),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Radio(
+                                      value: 0,
+                                      groupValue: _radioValue1,
+                                      onChanged: _handleRadioValueChange1,
+                                    ),
+                                    Text(
+                                      'อู่รถยนต์',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                    Radio(
+                                      value: 1,
+                                      groupValue: _radioValue1,
+                                      onChanged: _handleRadioValueChange1,
+                                    ),
+                                    Text(
+                                      'อู่มอเตอร์ไซด์',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ]),
                               buildSizedBox(),
                               TimePickerFormField(
                                 initialValue: _openTime,
@@ -287,36 +322,12 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               buildSizedBox(),
                               RaisedButton(
-                                child: Text('เรียกตำแหน่งที่ตั้ง',
-                                    style: TextStyle(
-                                        fontSize: 28)),
-                                color: Colors.orange[200],
-                                onPressed: () {
-                                  _initPlatformState();
-                              }),
-                              // TextFormField(
-                              //   initialValue: document['location']['lat'],
-                              //   decoration: new InputDecoration(
-                              //     border: new OutlineInputBorder(),
-                              //     hintText: 'กรุณาป้อนละติจูด',
-                              //     labelText: 'ละติจูด',
-                              //     prefixIcon: const Icon(
-                              //       Icons.location_on,
-                              //     ),
-                              //   ),
-                              // ),
-                              // buildSizedBox(),
-                              // TextFormField(
-                              //   initialValue: document['location']['lng'],
-                              //   decoration: new InputDecoration(
-                              //     border: new OutlineInputBorder(),
-                              //     hintText: 'กรุณาป้อนลองติจูด',
-                              //     labelText: 'ลองติจูด',
-                              //     prefixIcon: const Icon(
-                              //       Icons.location_on,
-                              //     ),
-                              //   ),
-                              // ),
+                                  child: Text('เรียกตำแหน่งที่ตั้ง',
+                                      style: TextStyle(fontSize: 28)),
+                                  color: Colors.orange[200],
+                                  onPressed: () {
+                                    _initPlatformState();
+                                  }),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -393,11 +404,5 @@ class _UpdatePageState extends State<UpdatePage> {
                 ),
               );
             }));
-  }
-
-  SizedBox buildSizedBox() {
-    return SizedBox(
-      height: 13,
-    );
   }
 }

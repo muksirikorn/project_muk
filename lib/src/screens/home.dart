@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../../model/province.dart';
-import '../../utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../page/district_page/district.dart';
-import '../../utils/algolia_services.dart';
-import '../../utils/auth_services.dart';
+
+import '../models/province.dart';
+import '../services/constant.dart';
+import '../services/algolia_services.dart';
+import '../services/auth_services.dart';
+
+import 'district.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.userId, this.logoutCallback})

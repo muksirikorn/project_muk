@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import './src/root.dart';
-import './src/page/district_page/district.dart';
-import './src/page/home_page/home.dart';
-import './src/page/location_detali_page/location_detail.dart';
-import './src/page/login_page/login.dart';
-import './src/page/name_shop_page/nameshop.dart';
-import './src/page/register_page/register.dart';
-import './src/themes/app_themes.dart';
-import './src/utils/constant.dart';
-import './src/utils/auth_services.dart';
+import './src/screens/district.dart';
+import './src/screens/home.dart';
+import './src/screens/shop/shop_detail.dart';
+import './src/screens/shop/shops_page.dart';
+import './src/screens/login.dart';
+import './src/screens/shop/new_shop_page.dart';
+import './src/theme/app_themes.dart';
+import './src/services/constant.dart';
+import './src/services/auth_services.dart';
 
 void main() {
   return runApp(Home());
@@ -18,10 +18,10 @@ class Home extends StatelessWidget {
   final _route = <String, WidgetBuilder>{
     Constant.HOME_ROUTE: (context) => HomePage(),
     Constant.DISTRICT_ROUTE: (context) => DistrictPage(),
-    Constant.NAME_SHOP_ROUTE: (context) => NameShopPage(),
-    Constant.LOCATION_DETAIL_ROUTE: (context) => LocationDetailPage(),
+    Constant.NAME_SHOP_ROUTE: (context) => ShopsPage(),
+    Constant.LOCATION_DETAIL_ROUTE: (context) => ShopDetailPage(),
     Constant.LOGIN_ROUTE: (context) => LoginPage(),
-    Constant.REIGTER_ROUTE: (context) => RegisterPage(),
+    Constant.REIGTER_ROUTE: (context) => NewShopPage(),
   };
 
   @override

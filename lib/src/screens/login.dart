@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/auth_services.dart';
+import '../services/auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.loginCallback});
@@ -91,11 +91,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-          children: <Widget>[
-            _showForm(),
-            _showCircularProgress(),
-          ],
-        ));
+      children: <Widget>[
+        _showForm(),
+        _showCircularProgress(),
+      ],
+    ));
   }
 
   Widget _showCircularProgress() {
@@ -108,27 +108,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
- void _showVerifyEmailSentDialog() {
-   showDialog(
-     context: context,
-     builder: (BuildContext context) {
-       return AlertDialog(
-         title: Text("Verify your account"),
-         content:
-             Text("Link to verify account has been sent to your email"),
-         actions: <Widget>[
-           FlatButton(
-             child: Text("Dismiss"),
-             onPressed: () {
-               toggleFormMode();
-               Navigator.of(context).pop();
-             },
-           ),
-         ],
-       );
-     },
-   );
- }
+  void _showVerifyEmailSentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Verify your account"),
+          content: Text("Link to verify account has been sent to your email"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Dismiss"),
+              onPressed: () {
+                toggleFormMode();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget _showForm() {
     return Container(

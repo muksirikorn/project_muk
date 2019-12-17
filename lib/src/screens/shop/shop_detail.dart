@@ -2,14 +2,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../utils/constant.dart';
+import '../../services/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
-import '../update_page/update.dart';
+import 'update_shop_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class LocationDetailPage extends StatefulWidget {
-  LocationDetailPage(
+class ShopDetailPage extends StatefulWidget {
+  ShopDetailPage(
       {Key key,
       this.docID,
       this.documentName,
@@ -24,10 +24,10 @@ class LocationDetailPage extends StatefulWidget {
   final String districtId;
 
   @override
-  _LocationDetailPageState createState() => _LocationDetailPageState();
+  _ShopDetailPageState createState() => _ShopDetailPageState();
 }
 
-class _LocationDetailPageState extends State<LocationDetailPage> {
+class _ShopDetailPageState extends State<ShopDetailPage> {
   GoogleMapController mapController;
 
   void _onMapCreated(GoogleMapController controller) {
@@ -76,7 +76,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => UpdatePage(
+                    builder: (context) => UpdateShopPage(
                           docID: widget.docID,
                           provinceId: widget.provinceId,
                           districtId: widget.districtId,
