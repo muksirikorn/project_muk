@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Constant.WHITE_COLOR, //set color
+        backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
@@ -163,7 +163,7 @@ class DataSearch extends SearchDelegate<String> {
               child: Center(
                   child: GestureDetector(
                 child: Card(
-                  color: Colors.yellow[200],
+                  color: Colors.orange[200],
                   child: Column(
                     children: <Widget>[
                       Row(children: <Widget>[
