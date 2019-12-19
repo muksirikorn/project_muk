@@ -33,6 +33,23 @@ class _ShopsPageState extends State<ShopsPage> {
     Navigator.pop(context);
   }
 
+  Widget checkAuth(String role) {
+    if (role == 'ADMIN') {
+      return IconButton(
+        icon: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return NewShopPage(
+              provinceId: widget.provinceId,
+              districtId: widget.districtId,
+            );
+          }));
+        },
+      );
+    }
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,19 +58,7 @@ class _ShopsPageState extends State<ShopsPage> {
           backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
           title: Text(widget.provinceName),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return NewShopPage(
-                    provinceId: widget.provinceId,
-                    districtId: widget.districtId,
-                  );
-                }));
-              },
-            )
-          ],
+          actions: <Widget>[checkAuth('ADMIN')],
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: Firestore.instance
