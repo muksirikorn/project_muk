@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:location/location.dart';
-import 'package:project_muk/src/screens/shop/scoped_model.dart';
+import '../../models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../models/store.dart';
@@ -181,8 +181,8 @@ class _NewShopPageState extends State<NewShopPage> {
           centerTitle: true,
           title: Text('เพิ่มร้านซ่อมรถ'),
         ),
-        body: ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model){
+        // body: ScopedModelDescendant<User>(
+        //   builder: (BuildContext context, Widget child, User model){
         body: Form(
           key: _formKey,
           autovalidate: true,
@@ -357,8 +357,8 @@ class _NewShopPageState extends State<NewShopPage> {
               ),
             ],
           ),
-        );
-          },
         ),
+        //   },
+        // ),
     );}
 }

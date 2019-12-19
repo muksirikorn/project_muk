@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:location/location.dart';
-import 'package:project_muk/src/screens/shop/scoped_model.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 import '../../models/store.dart';
 import '../../models/address.dart';
@@ -183,8 +181,6 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
           centerTitle: true,
           title: Text('อัพเดทร้านซ่อมรถ'),
         ),
-        body: ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model) {
         body: StreamBuilder(
             stream: Firestore.instance
                 .collection('store')
@@ -409,8 +405,8 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                   ],
                 ),
               );
-            });
-          },
-        )
+            }),
+        //   },
+        // )
     );}
 }

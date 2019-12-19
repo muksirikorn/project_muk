@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'shop_detail.dart';
 import '../../services/constant.dart';
 import 'new_shop_page.dart';
+import '../../models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ShopsPage extends StatefulWidget {
   ShopsPage(
@@ -52,13 +54,15 @@ class _ShopsPageState extends State<ShopsPage> {
 
   @override
   Widget build(BuildContext context) {
+    return ScopedModelDescendant<User>(
+          builder: (BuildContext context, Widget child, User model){
     return Scaffold(
         backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(
           backgroundColor: Constant.GREEN_COLOR,
           centerTitle: true,
           title: Text(widget.provinceName),
-          actions: <Widget>[checkAuth('ADMIN')],
+          actions: <Widget>[checkAuth(model.role)],
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: Firestore.instance
@@ -126,6 +130,7 @@ class _ShopsPageState extends State<ShopsPage> {
                               );
                             },
                             onLongPress: () {
+                              if(model.role == 'ADMIN') {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -151,6 +156,7 @@ class _ShopsPageState extends State<ShopsPage> {
                                       ],
                                     );
                                   });
+                              }
                             }),
                       ),
                     );
@@ -158,6 +164,6 @@ class _ShopsPageState extends State<ShopsPage> {
                 );
             }
           },
-        ));
+        ));});
   }
 }

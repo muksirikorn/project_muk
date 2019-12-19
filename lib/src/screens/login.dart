@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_muk/src/screens/shop/new_shop_page.dart';
-import 'package:project_muk/src/screens/shop/scoped_model.dart';
+import 'package:project_muk/src/models/user.dart';
 import '../services/auth_services.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -16,8 +15,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = new GlobalKey<FormState>();
-  final MainModel _model = MainModel();
-
 
   String _email;
   String _password;
@@ -94,32 +91,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget child, MainModel model){
+    return ScopedModelDescendant<User>(
+        builder: (BuildContext context, Widget child, User model){
     return Scaffold(
         body: Stack(
       children: <Widget>[
-              Text(
-                'Email:',
-              ),
-              Text(
-                'Password:',
-              ),
-              Text(
-                '${model.count}',
-                style: Theme.of(context).textTheme.display1,
-              ),
-              SizedBox(height: 10.0),
-              RaisedButton(
-                padding: const EdgeInsets.all(8.0),
-                  child: Text('Login'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<NewShopPage>(
-                          builder: (BuildContext context) => NewShopPage()),
-                    );
-                  }),
         _showForm(),
         _showCircularProgress(),
       ],
