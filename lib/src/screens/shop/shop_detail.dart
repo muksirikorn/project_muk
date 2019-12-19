@@ -62,6 +62,26 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
   String lat;
   String lng;
 
+  Widget checkAuth(String role) {
+    if (role == 'ADMIN') {
+      return IconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UpdateShopPage(
+                      docID: widget.docID,
+                      provinceId: widget.provinceId,
+                      districtId: widget.districtId,
+                    )),
+          );
+        },
+        icon: Icon(Icons.edit, color: Colors.white),
+      );
+    }
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,22 +90,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
         backgroundColor: Constant.GREEN_COLOR,
         centerTitle: true,
         title: Text(widget.documentName),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => UpdateShopPage(
-                          docID: widget.docID,
-                          provinceId: widget.provinceId,
-                          districtId: widget.districtId,
-                        )),
-              );
-            },
-            child: Icon(Icons.edit, color: Colors.white),
-          )
-        ],
+        actions: <Widget>[checkAuth('ADMIN')],
       ),
       body: StreamBuilder(
           stream: Firestore.instance

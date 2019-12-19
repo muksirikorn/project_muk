@@ -115,7 +115,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
   Future<bool> _submitForm(String provinceId, String districtId) async {
     final FormState form = _formKey.currentState;
     form.save();
-    //upload image
+
     String imgUrl = await onImageUploading(_image);
 
     await Firestore.instance
@@ -192,7 +192,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Text("Loading");
+                return Center(child: Text("Loading"));
               }
               var document = snapshot.data;
               var _openHour = document['operation']['open'].split(":")[0];
