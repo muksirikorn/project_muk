@@ -2,17 +2,17 @@ import 'operation.dart';
 import 'address.dart';
 import 'contact.dart';
 
-class Insert {
+class Shop {
   String name;
   Address address;
   Contact contact;
   String description;
+  String type;
   Operation operation;
-  String lat;
-  String lng;
-  String src;
+  double lat;
+  double lng;
 
-  Insert(
+  Shop(
       {this.name,
       this.address,
       this.contact,
@@ -20,5 +20,5 @@ class Insert {
       this.operation,
       this.lat,
       this.lng,
-      this.src});
+      this.type});
 }
