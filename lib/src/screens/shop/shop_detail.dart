@@ -7,6 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'update_shop_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ShopDetailPage extends StatefulWidget {
   ShopDetailPage(
@@ -84,13 +86,15 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    return ScopedModelDescendant<User>(
+          builder: (BuildContext context, Widget child, User model){
     return Scaffold(
       backgroundColor: Constant.GG_COLOR,
       appBar: AppBar(
         backgroundColor: Constant.GREEN_COLOR,
         centerTitle: true,
         title: Text(widget.documentName),
-        actions: <Widget>[checkAuth('ADMIN')],
+        actions: <Widget>[checkAuth(model.role)],
       ),
       body: StreamBuilder(
           stream: Firestore.instance
@@ -321,6 +325,6 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
               ),
             );
           }),
-    );
+    );});
   }
 }

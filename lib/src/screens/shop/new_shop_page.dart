@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:location/location.dart';
+import '../../models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import '../../models/store.dart';
 import '../../models/address.dart';
@@ -179,6 +181,8 @@ class _NewShopPageState extends State<NewShopPage> {
           centerTitle: true,
           title: Text('เพิ่มร้านซ่อมรถ'),
         ),
+        // body: ScopedModelDescendant<User>(
+        //   builder: (BuildContext context, Widget child, User model){
         body: Form(
           key: _formKey,
           autovalidate: true,
@@ -289,8 +293,10 @@ class _NewShopPageState extends State<NewShopPage> {
                         ),
                         buildSizedBox(),
                         RaisedButton(
+                          child: Center(
                             child: Text('เรียกตำแหน่งที่ตั้ง',
-                                style: TextStyle(fontSize: 28)),
+                                style: TextStyle(fontSize: 20)),
+                            ),
                             color: Colors.orange[200],
                             onPressed: () {
                               _initPlatformState();
@@ -351,6 +357,8 @@ class _NewShopPageState extends State<NewShopPage> {
               ),
             ],
           ),
-        ));
-  }
+        ),
+        //   },
+        // ),
+    );}
 }

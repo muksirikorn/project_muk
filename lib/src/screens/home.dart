@@ -9,13 +9,17 @@ import '../services/auth_services.dart';
 
 import 'district.dart';
 
+import '../models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.auth, this.userId, this.logoutCallback})
+  HomePage({Key key, this.auth, this.userId, this.logoutCallback, this.userEmail})
       : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback logoutCallback;
   final String userId;
+  final String userEmail;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -32,10 +36,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return ScopedModelDescendant<User>(
+          builder: (BuildContext context, Widget child, User model){
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Constant.WHITE_COLOR, //set color
+        backgroundColor: Constant.GG_COLOR,
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
@@ -61,6 +67,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton.extended(
           tooltip: 'ค้นหา',
           onPressed: () {
+            model.updateUserRole(widget.userEmail);
             showSearch(context: context, delegate: DataSearch());
           },
           icon: Icon(
@@ -72,7 +79,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
+  });}
 
   Widget dataView(String type) {
     return StreamBuilder<QuerySnapshot>(
@@ -163,7 +170,7 @@ class DataSearch extends SearchDelegate<String> {
               child: Center(
                   child: GestureDetector(
                 child: Card(
-                  color: Colors.yellow[200],
+                  color: Colors.orange[200],
                   child: Column(
                     children: <Widget>[
                       Row(children: <Widget>[

@@ -322,8 +322,10 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                               ),
                               buildSizedBox(),
                               RaisedButton(
+                                child: Center(
                                   child: Text('เรียกตำแหน่งที่ตั้ง',
-                                      style: TextStyle(fontSize: 28)),
+                                      style: TextStyle(fontSize: 20)),
+                                  ),
                                   color: Colors.orange[200],
                                   onPressed: () {
                                     _initPlatformState();
@@ -403,6 +405,8 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                   ],
                 ),
               );
-            }));
-  }
+            }),
+        //   },
+        // )
+    );}
 }

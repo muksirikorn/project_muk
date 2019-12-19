@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/models/user.dart';
 import '../services/auth_services.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.loginCallback});
@@ -89,6 +91,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    return ScopedModelDescendant<User>(
+        builder: (BuildContext context, Widget child, User model){
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -96,7 +100,8 @@ class _LoginPageState extends State<LoginPage> {
         _showCircularProgress(),
       ],
     ));
-  }
+        },
+    );}
 
   Widget _showCircularProgress() {
     if (_isLoading) {
@@ -168,20 +173,23 @@ class _LoginPageState extends State<LoginPage> {
   Widget showLogo() {
     return Hero(
       tag: 'hero',
-      child: Padding(
+      child: Container(
+        width: 150,height: 300,
+        child: Padding(
         padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 48.0,
-          child: Image.asset('assets/images/car.png'),
+          child: Image.asset('assets/images/car.png',),
         ),
-      ),
+      ))
+      ,
     );
   }
 
   Widget showEmailInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
       child: TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,

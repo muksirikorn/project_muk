@@ -21,6 +21,7 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
+  String _userEmail = "";
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _RootState extends State<Root> {
     widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
+        _userEmail = user.email;
       });
     });
     setState(() {
@@ -79,6 +81,7 @@ class _RootState extends State<Root> {
         if (_userId.length > 0 && _userId != null) {
           return HomePage(
             userId: _userId,
+            userEmail: _userEmail,
             auth: widget.auth,
             logoutCallback: logoutCallback,
           );

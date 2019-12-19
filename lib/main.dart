@@ -9,7 +9,8 @@ import './src/screens/shop/new_shop_page.dart';
 import './src/theme/app_themes.dart';
 import './src/services/constant.dart';
 import './src/services/auth_services.dart';
-
+import './src/models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 void main() {
   return runApp(Home());
 }
@@ -26,12 +27,14 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final User _model = User();
+    return ScopedModel<User>(
+      model: _model,
+      child: MaterialApp (
       theme: appThemes(),
       debugShowCheckedModeBanner: false,
       title: "ค้นหาร้านซ่อมรถ",
       routes: _route,
       home: Root(auth: AuthServices()),
-    );
-  }
+    ));}
 }
