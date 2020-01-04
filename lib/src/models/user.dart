@@ -11,8 +11,7 @@ class User extends Model {
   }
 
   void updateUserRole(String email) {
-    print(email);
-   if (email == 'mukmind369@gmail.com') {
+    if (email == 'mukmind369@gmail.com') {
       _role = 'ADMIN';
     } else {
       _role = 'USER';

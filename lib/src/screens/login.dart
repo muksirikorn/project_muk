@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_muk/src/models/user.dart';
+import 'package:project_muk/src/services/logging_services.dart';
 import '../services/auth_services.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -23,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoginForm;
   bool _isLoading;
 
-  // Check if form is valid before perform login or signup
   bool validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -33,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
     return false;
   }
 
-  // Perform login or signup
   void validateAndSubmit() async {
     setState(() {
       _errorMessage = "";
@@ -44,22 +43,19 @@ class _LoginPageState extends State<LoginPage> {
       try {
         if (_isLoginForm) {
           userId = await widget.auth.signIn(_email, _password);
-          print('Signed in: $userId');
         } else {
           userId = await widget.auth.signUp(_email, _password);
           widget.auth.sendEmailVerification();
           _showVerifyEmailSentDialog();
-          print('Signed up user: $userId');
         }
         setState(() {
           _isLoading = false;
         });
         if (userId.length > 0 && userId != null && _isLoginForm) {
-          print('hi');
           widget.loginCallback();
         }
       } catch (e) {
-        print('Error: $e');
+        logger.e(e);
         setState(() {
           _isLoading = false;
           _errorMessage = e.message;
@@ -92,16 +88,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(
-        builder: (BuildContext context, Widget child, User model){
-    return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        _showForm(),
-        _showCircularProgress(),
-      ],
-    ));
-        },
-    );}
+      builder: (BuildContext context, Widget child, User model) {
+        return Scaffold(
+            body: Stack(
+          children: <Widget>[
+            _showForm(),
+            _showCircularProgress(),
+          ],
+        ));
+      },
+    );
+  }
 
   Widget _showCircularProgress() {
     if (_isLoading) {
@@ -174,16 +171,18 @@ class _LoginPageState extends State<LoginPage> {
     return Hero(
       tag: 'hero',
       child: Container(
-        width: 150,height: 300,
-        child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 48.0,
-          child: Image.asset('assets/images/car.png',),
-        ),
-      ))
-      ,
+          width: 150,
+          height: 300,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+            child: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              radius: 48.0,
+              child: Image.asset(
+                'assets/images/car.png',
+              ),
+            ),
+          )),
     );
   }
 

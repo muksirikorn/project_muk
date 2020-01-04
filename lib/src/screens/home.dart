@@ -6,6 +6,7 @@ import '../models/province.dart';
 import '../services/constant.dart';
 import '../services/algolia_services.dart';
 import '../services/auth_services.dart';
+import '../services/logging_services.dart';
 
 import 'district.dart';
 
@@ -13,7 +14,8 @@ import '../models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.auth, this.userId, this.logoutCallback, this.userEmail})
+  HomePage(
+      {Key key, this.auth, this.userId, this.logoutCallback, this.userEmail})
       : super(key: key);
 
   final BaseAuth auth;
@@ -30,56 +32,57 @@ class _HomePageState extends State<HomePage> {
       await widget.auth.signOut();
       widget.logoutCallback();
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(
-          builder: (BuildContext context, Widget child, User model){
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: Constant.GG_COLOR,
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.directions_car, color: Colors.black)),
-              Tab(icon: Icon(Icons.directions_bike, color: Colors.black)),
+        builder: (BuildContext context, Widget child, User model) {
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          backgroundColor: Constant.GG_COLOR,
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.directions_car, color: Colors.black)),
+                Tab(icon: Icon(Icons.directions_bike, color: Colors.black)),
+              ],
+            ),
+            automaticallyImplyLeading: false,
+            backgroundColor: Constant.GREEN_COLOR,
+            title: Text('ร้านซ่อมรถ'),
+            actions: <Widget>[
+              FlatButton(
+                  child: Icon(Icons.exit_to_app, color: Colors.white),
+                  onPressed: signOut)
             ],
           ),
-          automaticallyImplyLeading: false,
-          backgroundColor: Constant.GREEN_COLOR,
-          title: Text('ร้านซ่อมรถ'),
-          actions: <Widget>[
-            FlatButton(
-                child: Icon(Icons.exit_to_app, color: Colors.white),
-                onPressed: signOut)
-          ],
-        ),
-        body: TabBarView(
-          children: [
-            homeCar(),
-            homeBike(),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          tooltip: 'ค้นหา',
-          onPressed: () {
-            model.updateUserRole(widget.userEmail);
-            showSearch(context: context, delegate: DataSearch());
-          },
-          icon: Icon(
-            Icons.search,
-            color: Colors.black,
+          body: TabBarView(
+            children: [
+              homeCar(),
+              homeBike(),
+            ],
           ),
-          label: Text("ค้นหา", style: TextStyle(color: Colors.black)),
-          backgroundColor: Constant.GREEN_COLOR,
+          floatingActionButton: FloatingActionButton.extended(
+            tooltip: 'ค้นหา',
+            onPressed: () {
+              model.updateUserRole(widget.userEmail);
+              showSearch(context: context, delegate: DataSearch());
+            },
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            label: Text("ค้นหา", style: TextStyle(color: Colors.black)),
+            backgroundColor: Constant.GREEN_COLOR,
+          ),
         ),
-      ),
-    );
-  });}
+      );
+    });
+  }
 
   Widget dataView(String type) {
     return StreamBuilder<QuerySnapshot>(
