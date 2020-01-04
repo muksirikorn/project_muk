@@ -9,7 +9,7 @@ import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:location/location.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../../models/user.dart';
+import '../../scoped_models/user.dart';
 import '../../models/store.dart';
 import '../../models/address.dart';
 import '../../models/contact.dart';

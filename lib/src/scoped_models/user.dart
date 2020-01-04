@@ -3,18 +3,20 @@ import 'package:scoped_model/scoped_model.dart';
 class User extends Model {
   String username;
   String email;
-  String _role;
+  String role;
   String token;
 
-  String get role {
-    return _role;
+  User({this.username, this.email, this.role, this.token});
+
+  String get userRole {
+    return role;
   }
 
   void updateUserRole(String email) {
     if (email == 'mukmind369@gmail.com') {
-      _role = 'ADMIN';
+      role = 'ADMIN';
     } else {
-      _role = 'USER';
+      role = 'USER';
     }
     notifyListeners();
   }

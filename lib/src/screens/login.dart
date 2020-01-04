@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project_muk/src/models/user.dart';
-import 'package:project_muk/src/services/logging_services.dart';
-import '../services/auth_services.dart';
 import 'package:scoped_model/scoped_model.dart';
+import '../scoped_models/user.dart';
+import '../services/logging_services.dart';
+import '../services/auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.loginCallback});
@@ -90,12 +90,13 @@ class _LoginPageState extends State<LoginPage> {
     return ScopedModelDescendant<User>(
       builder: (BuildContext context, Widget child, User model) {
         return Scaffold(
-            body: Stack(
-          children: <Widget>[
-            _showForm(),
-            _showCircularProgress(),
-          ],
-        ));
+          body: Stack(
+            children: <Widget>[
+              _showForm(),
+              _showCircularProgress(),
+            ],
+          ),
+        );
       },
     );
   }
@@ -133,21 +134,22 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _showForm() {
     return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              showLogo(),
-              showEmailInput(),
-              showPasswordInput(),
-              showPrimaryButton(),
-              showSecondaryButton(),
-              showErrorMessage(),
-            ],
-          ),
-        ));
+      padding: EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            showLogo(),
+            showEmailInput(),
+            showPasswordInput(),
+            showPrimaryButton(),
+            showSecondaryButton(),
+            showErrorMessage(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget showErrorMessage() {
@@ -171,18 +173,19 @@ class _LoginPageState extends State<LoginPage> {
     return Hero(
       tag: 'hero',
       child: Container(
-          width: 150,
-          height: 300,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 48.0,
-              child: Image.asset(
-                'assets/images/car.png',
-              ),
+        width: 150,
+        height: 300,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 48.0,
+            child: Image.asset(
+              'assets/images/car.png',
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
@@ -227,25 +230,30 @@ class _LoginPageState extends State<LoginPage> {
   Widget showSecondaryButton() {
     return FlatButton(
         child: Text(
-            _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+          _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+        ),
         onPressed: toggleFormMode);
   }
 
   Widget showPrimaryButton() {
     return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
-        child: SizedBox(
-          height: 40.0,
-          child: RaisedButton(
-            elevation: 5.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)),
-            color: Color(0xFF4CAF50),
-            child: Text(_isLoginForm ? 'Login' : 'Create account',
-                style: TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: validateAndSubmit,
+      padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+      child: SizedBox(
+        height: 40.0,
+        child: RaisedButton(
+          elevation: 5.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
           ),
-        ));
+          color: Color(0xFF4CAF50),
+          child: Text(
+            _isLoginForm ? 'Login' : 'Create account',
+            style: TextStyle(fontSize: 20.0, color: Colors.white),
+          ),
+          onPressed: validateAndSubmit,
+        ),
+      ),
+    );
   }
 }

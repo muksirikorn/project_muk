@@ -1,4 +1,5 @@
 import 'package:algolia/algolia.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/province.dart';
 
 class AlogoliaService {
@@ -8,8 +9,8 @@ class AlogoliaService {
   static final algolisServices = AlogoliaService.instance;
 
   final Algolia _algolia = Algolia.init(
-    applicationId: 'AFJN3ROVJZ',
-    apiKey: 'a16abd9d632825bb87c181f6a97ecc7d',
+    applicationId: DotEnv().env['ALGOLIA_APP_ID'],
+    apiKey: DotEnv().env['ALGOLIA_KEY'],
   );
 
   AlgoliaIndexReference get _provinces => _algolia.instance.index('provinces');
