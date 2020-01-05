@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/province.dart';
-import '../services/algolia_services.dart';
+import '../services/algolia_service.dart';
 import 'district.dart';
 
 class DataSearch extends SearchDelegate<String> {

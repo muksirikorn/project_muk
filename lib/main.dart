@@ -8,8 +8,9 @@ import 'package:firebase_analytics/observer.dart';
 
 import './src/root.dart';
 import './src/theme/app_themes.dart';
-import './src/services/auth_services.dart';
+import './src/services/auth_service.dart';
 import './src/scoped_models/user.dart';
+import './src/services/service_locator.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,7 @@ Future main() async {
   await DotEnv().load('.env');
   Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  setupLocator();
   runApp(Home());
 }
 

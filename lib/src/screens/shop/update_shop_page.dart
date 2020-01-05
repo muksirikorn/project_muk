@@ -13,7 +13,7 @@ import '../../models/address.dart';
 import '../../models/contact.dart';
 import '../../theme/app_themes.dart';
 import '../../services/image_service.dart';
-import '../../services/logging_services.dart';
+import '../../services/logging_service.dart';
 
 import '../home.dart';
 import '../../components/shared_components.dart';

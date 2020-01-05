@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './services/auth_services.dart';
+import './services/auth_service.dart';
 import './screens/login.dart';
 import './screens/home.dart';
 
@@ -22,6 +22,7 @@ class _RootState extends State<Root> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
   String _userEmail = "";
+  String _userToken;
 
   @override
   void initState() {

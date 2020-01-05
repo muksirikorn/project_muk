@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/user.dart';
-import '../services/logging_services.dart';
-import '../services/auth_services.dart';
+import '../services/logging_service.dart';
+import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.loginCallback});

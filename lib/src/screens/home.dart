@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../theme/app_themes.dart';
-import '../services/auth_services.dart';
-import '../services/logging_services.dart';
+import '../services/auth_service.dart';
+import '../services/logging_service.dart';
 
 import '../scoped_models/user.dart';
 import 'province_serach.dart';
@@ -24,6 +24,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() { 
+    super.initState();
+  }
   signOut() async {
     try {
       await widget.auth.signOut();
@@ -65,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             ),
             floatingActionButton: FloatingActionButton.extended(
               tooltip: 'ค้นหา',
-              onPressed: () {
+              onPressed: () async {
                 model.updateUserRole(widget.userEmail);
                 showSearch(context: context, delegate: DataSearch());
               },

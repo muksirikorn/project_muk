@@ -12,6 +12,10 @@ class User extends Model {
     return role;
   }
 
+  String get userToken {
+    return token;
+  }
+
   void updateUserRole(String email) {
     if (email == 'mukmind369@gmail.com') {
       role = 'ADMIN';
