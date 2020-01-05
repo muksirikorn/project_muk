@@ -50,7 +50,7 @@ class _NewShopPageState extends State<NewShopPage> {
   Contact newContact = new Contact();
   Address newAddress = new Address();
 
-  LocationData _startLocation;
+  LocationData startLocation;
   LocationData _currentLocation;
 
   StreamSubscription<LocationData> _locationSubscription;
@@ -106,7 +106,7 @@ class _NewShopPageState extends State<NewShopPage> {
     }
 
     setState(() {
-      _startLocation = location;
+      startLocation = location;
     });
   }
 

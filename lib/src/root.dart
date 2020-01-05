@@ -22,7 +22,6 @@ class _RootState extends State<Root> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
   String _userEmail = "";
-  String _userToken;
 
   @override
   void initState() {
