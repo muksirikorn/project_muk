@@ -14,20 +14,20 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
-  url_launcher: ^5.1.4
-  http: ^0.12.0+2
-  cloud_firestore: ^0.12.9+4
+  url_launcher: ^5.4.1
+  http: ^0.12.0+3
+  cloud_firestore: ^0.13.0+1
   transparent_image: ^1.0.0
   image_picker: 0.6.0+20
   datetime_picker_formfield: ^0.1.7
   uuid: ^2.0.2
-  firebase_storage: ^3.0.6
+  firebase_storage: ^3.1.1
   algolia: ^0.1.7
   firebase_auth: ^0.14.0+9
   google_maps_flutter: ^0.5.21
@@ -36,11 +36,13 @@ dependencies:
   flutter_native_splash: ^0.1.9
   get_it: ^2.0.0
   flutter_dotenv: ^2.1.0
+  firebase_crashlytics: ^0.1.2
+  firebase_analytics: ^5.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  logger: ^0.7.0+2
+  logger: ^0.8.2
 
 flutter_native_splash:
   image: assets/images/logocar.png

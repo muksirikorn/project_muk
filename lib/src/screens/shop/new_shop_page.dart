@@ -14,7 +14,7 @@ import '../../models/store.dart';
 import '../../models/address.dart';
 import '../../models/contact.dart';
 
-import '../../services/constant.dart';
+import '../../theme/app_themes.dart';
 import '../../services/image_service.dart';
 import '../../services/logging_services.dart';
 
@@ -128,7 +128,7 @@ class _NewShopPageState extends State<NewShopPage> {
   Future<bool> _submitForm(String provinceId, String districtId) async {
     final FormState form = _formKey.currentState;
     form.save();
-    String imgUrl = await onImageUploading(_image);
+    String imgUrl = await ImageServices().onImageUploading(_image);
 
     Map<String, dynamic> data = {
       "name": newShop.name,
@@ -163,9 +163,9 @@ class _NewShopPageState extends State<NewShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.GG_COLOR,
+      backgroundColor: AppTheme.GG_COLOR,
       appBar: AppBar(
-        backgroundColor: Constant.GREEN_COLOR,
+        backgroundColor: AppTheme.GREEN_COLOR,
         centerTitle: true,
         title: Text('เพิ่มร้านซ่อมรถ'),
       ),

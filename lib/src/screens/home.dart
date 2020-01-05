@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-import '../models/province.dart';
-import '../services/constant.dart';
-import '../services/algolia_services.dart';
+import '../theme/app_themes.dart';
 import '../services/auth_services.dart';
 import '../services/logging_services.dart';
 
-import 'district.dart';
-
 import '../scoped_models/user.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'province_serach.dart';
 
 class HomePage extends StatefulWidget {
   HomePage(
@@ -43,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            backgroundColor: Constant.GG_COLOR,
+            backgroundColor: AppTheme.GG_COLOR,
             appBar: AppBar(
               bottom: TabBar(
                 tabs: [
@@ -52,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               automaticallyImplyLeading: false,
-              backgroundColor: Constant.GREEN_COLOR,
+              backgroundColor: AppTheme.GREEN_COLOR,
               title: Text('ร้านซ่อมรถ'),
               actions: <Widget>[
                 FlatButton(
@@ -77,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.black,
               ),
               label: Text("ค้นหา", style: TextStyle(color: Colors.black)),
-              backgroundColor: Constant.GREEN_COLOR,
+              backgroundColor: AppTheme.GREEN_COLOR,
             ),
           ),
         );
@@ -131,88 +128,5 @@ class _HomePageState extends State<HomePage> {
 
   Widget homeBike() {
     return dataView('motorbike');
-  }
-}
-
-class DataSearch extends SearchDelegate<String> {
-  final algoliaService = AlogoliaService.instance;
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = "";
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-        icon: AnimatedIcon(
-            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
-        onPressed: () {
-          close(context, null);
-        });
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<Province>>(
-      future: algoliaService.performProvinceSearch(text: query),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final provinces = snapshot.data.map((province) {
-            return Container(
-              child: Center(
-                  child: GestureDetector(
-                child: Card(
-                  color: Colors.orange[200],
-                  child: Column(
-                    children: <Widget>[
-                      Row(children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.all(7.0),
-                            child: Text(
-                              province.name,
-                              style: TextStyle(fontSize: 18.0),
-                            )),
-                      ]),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DistrictPage(
-                            provinceName: province.name,
-                            provinceId: province.documentID)),
-                  );
-                },
-              )),
-            );
-          }).toList();
-
-          return ListView(children: provinces);
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text("${snapshot.error.toString()}"),
-          );
-        }
-
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
   }
 }

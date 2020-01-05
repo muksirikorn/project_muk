@@ -2,11 +2,11 @@ import 'package:algolia/algolia.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/province.dart';
 
-class AlogoliaService {
-  AlogoliaService._privateConstructor();
+class AlogoliaServices {
+  AlogoliaServices._privateConstructor();
 
-  static final AlogoliaService instance = AlogoliaService._privateConstructor();
-  static final algolisServices = AlogoliaService.instance;
+  static final AlogoliaServices instance = AlogoliaServices._privateConstructor();
+  static final algolisServices = AlogoliaServices.instance;
 
   final Algolia _algolia = Algolia.init(
     applicationId: DotEnv().env['ALGOLIA_APP_ID'],

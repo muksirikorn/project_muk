@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/constant.dart';
+import '../theme/app_themes.dart';
 import './shop/shops_page.dart';
 
 class DistrictPage extends StatefulWidget {
@@ -22,9 +22,9 @@ class _DistrictPageState extends State<DistrictPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Constant.WHITE_COLOR,
+        backgroundColor: AppTheme.WHITE_COLOR,
         appBar: AppBar(
-          backgroundColor: Constant.GREEN_COLOR,
+          backgroundColor: AppTheme.GREEN_COLOR,
           centerTitle: true,
           title: Text(widget.provinceName),
         ),

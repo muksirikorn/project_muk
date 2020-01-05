@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../services/constant.dart';
+import '../../theme/app_themes.dart';
 import '../../scoped_models/user.dart';
 import 'update_shop_page.dart';
 
@@ -90,9 +90,9 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
     return ScopedModelDescendant<User>(
       builder: (BuildContext context, Widget child, User model) {
         return Scaffold(
-          backgroundColor: Constant.GG_COLOR,
+          backgroundColor: AppTheme.GG_COLOR,
           appBar: AppBar(
-            backgroundColor: Constant.GREEN_COLOR,
+            backgroundColor: AppTheme.GREEN_COLOR,
             centerTitle: true,
             title: Text(widget.documentName),
             actions: <Widget>[checkAuth(model.userRole)],

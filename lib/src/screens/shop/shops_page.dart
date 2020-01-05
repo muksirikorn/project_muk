@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../services/constant.dart';
+import '../../theme/app_themes.dart';
 import '../../scoped_models/user.dart';
 import 'shop_detail.dart';
 import 'new_shop_page.dart';
@@ -57,9 +57,9 @@ class _ShopsPageState extends State<ShopsPage> {
     return ScopedModelDescendant<User>(
         builder: (BuildContext context, Widget child, User model) {
       return Scaffold(
-          backgroundColor: Constant.GG_COLOR,
+          backgroundColor: AppTheme.GG_COLOR,
           appBar: AppBar(
-            backgroundColor: Constant.GREEN_COLOR,
+            backgroundColor: AppTheme.GREEN_COLOR,
             centerTitle: true,
             title: Text(widget.provinceName),
             actions: <Widget>[checkAuth(model.role)],

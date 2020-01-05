@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_muk/src/services/logging_services.dart';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -23,6 +24,7 @@ class AuthServices implements BaseAuth {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
+    loggerNoStack.v(user);
     return user.uid;
   }
 

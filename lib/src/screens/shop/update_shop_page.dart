@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:location/location.dart';
-import 'package:project_muk/src/services/logging_services.dart';
 
 import '../../models/store.dart';
 import '../../models/address.dart';
 import '../../models/contact.dart';
-import '../../services/constant.dart';
+import '../../theme/app_themes.dart';
 import '../../services/image_service.dart';
+import '../../services/logging_services.dart';
 
 import '../home.dart';
 import '../../components/shared_components.dart';
@@ -112,7 +112,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
     final FormState form = _formKey.currentState;
     form.save();
 
-    String imgUrl = await onImageUploading(_image);
+    String imgUrl = await ImageServices().onImageUploading(_image);
 
     Map<String, dynamic> data = {
       "name": newShop.name,
@@ -165,9 +165,9 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.GG_COLOR,
+      backgroundColor: AppTheme.GG_COLOR,
       appBar: AppBar(
-        backgroundColor: Constant.GREEN_COLOR,
+        backgroundColor: AppTheme.GREEN_COLOR,
         centerTitle: true,
         title: Text('อัพเดทร้านซ่อมรถ'),
       ),
