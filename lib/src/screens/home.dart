@@ -24,11 +24,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
-  void initState() { 
+  void initState() {
     super.initState();
   }
+
   signOut() async {
     try {
       await widget.auth.signOut();
