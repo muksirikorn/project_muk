@@ -137,7 +137,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
       },
     };
 
-    loggerNoStack.v(data);
+    logger.v(data);
 
     await Firestore.instance
         .collection('store')

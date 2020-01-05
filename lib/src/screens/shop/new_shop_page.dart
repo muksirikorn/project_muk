@@ -153,7 +153,7 @@ class _NewShopPageState extends State<NewShopPage> {
       },
     };
 
-    loggerNoStack.v(data);
+    logger.v(data);
 
     await Firestore.instance.collection('store').document().setData(data);
 

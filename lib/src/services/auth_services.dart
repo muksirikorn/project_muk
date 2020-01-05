@@ -24,7 +24,7 @@ class AuthServices implements BaseAuth {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    loggerNoStack.v(user);
+    logger.v(user);
     return user.uid;
   }
 
@@ -37,6 +37,7 @@ class AuthServices implements BaseAuth {
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
+    logger.v(user);
     return user;
   }
 
