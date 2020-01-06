@@ -79,6 +79,7 @@ class _ShopsPageState extends State<ShopsPage> {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return Center(child: CircularProgressIndicator());
+                  break;
                 default:
                   if (snapshot.hasData) {
                     return ListView(
@@ -175,6 +176,7 @@ class _ShopsPageState extends State<ShopsPage> {
                   } else if (snapshot.hasError) {
                     return Container();
                   }
+                  break;
               }
               return Center(child: CircularProgressIndicator());
             },

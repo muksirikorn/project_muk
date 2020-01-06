@@ -1,5 +1,4 @@
 import 'package:algolia/algolia.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/province.dart';
 
 class AlogoliaServices {

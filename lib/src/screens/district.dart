@@ -37,6 +37,7 @@ class _DistrictPageState extends State<DistrictPage> {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return Center(child: CircularProgressIndicator());
+              break;
             default:
               if (snapshot.hasData) {
                 return ListView(
@@ -71,6 +72,7 @@ class _DistrictPageState extends State<DistrictPage> {
               } else if (snapshot.hasError) {
                 return Container();
               }
+              break;
           }
           return Center(child: Text('Error: ${snapshot.error}'));
         },
