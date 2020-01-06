@@ -38,11 +38,11 @@ class _NewShopPageState extends State<NewShopPage> {
   final databaseReference = Firestore.instance;
 
   DateTime date;
-  TimeOfDay opentime, closetime;
+  TimeOfDay openTime, closeTime;
 
-  Shop newShop = new Shop();
-  Contact newContact = new Contact();
-  Address newAddress = new Address();
+  Shop newShop = Shop();
+  Contact newContact = Contact();
+  Address newAddress = Address();
 
   LocationData startLocation;
   LocationData _currentLocation;
@@ -60,7 +60,11 @@ class _NewShopPageState extends State<NewShopPage> {
   @override
   void initState() {
     super.initState();
-    _initPlatformState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   _initPlatformState() async {
@@ -149,9 +153,10 @@ class _NewShopPageState extends State<NewShopPage> {
       "description": newShop.description,
       "type": newShop.type,
       "operation": {
-        "open": opentime.format(context),
-        "close": closetime.format(context)
+        "open": openTime.format(context),
+        "close": closeTime.format(context),
       },
+      "createdAt": DateTime.now().millisecondsSinceEpoch,
     };
 
     logger.v(data);
@@ -159,7 +164,7 @@ class _NewShopPageState extends State<NewShopPage> {
     try {
       DocumentReference docRef =
           await databaseReference.collection('store').add(data);
-      logger.v(docRef);
+      logger.v(docRef.documentID);
       complete = true;
     } catch (e) {
       logger.e(e);
@@ -275,18 +280,19 @@ class _NewShopPageState extends State<NewShopPage> {
                                 prefixIcon: const Icon(
                                   Icons.access_time,
                                 )),
-                            onChanged: (t) => setState(() => opentime = t),
+                            onChanged: (t) => setState(() => openTime = t),
                           ),
                           buildSizedBox(),
                           TimePickerFormField(
                             format: timeFormat,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'เวลาปิด',
-                                prefixIcon: const Icon(
-                                  Icons.access_time,
-                                )),
-                            onChanged: (t) => setState(() => closetime = t),
+                              border: OutlineInputBorder(),
+                              labelText: 'เวลาปิด',
+                              prefixIcon: const Icon(
+                                Icons.access_time,
+                              ),
+                            ),
+                            onChanged: (t) => setState(() => closeTime = t),
                           ),
                           buildSizedBox(),
                           RaisedButton(
@@ -298,6 +304,14 @@ class _NewShopPageState extends State<NewShopPage> {
                               onPressed: () {
                                 _initPlatformState();
                               }),
+                          FlatButton(
+                            onPressed: getImageFromCam,
+                            color: Colors.blue[200],
+                            child: Center(
+                              child: Text('เลือกรูปภาพ',
+                                  style: TextStyle(fontSize: 20)),
+                            ),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -308,13 +322,6 @@ class _NewShopPageState extends State<NewShopPage> {
                                   child: _image == null
                                       ? Text('กรุณาเลือกรูปภาพ')
                                       : Image.file(_image),
-                                ),
-                              ),
-                              FloatingActionButton(
-                                onPressed: getImageFromCam,
-                                tooltip: 'Pick Image',
-                                child: Icon(
-                                  Icons.add_a_photo,
                                 ),
                               ),
                             ],
@@ -341,7 +348,7 @@ class _NewShopPageState extends State<NewShopPage> {
                                 if (done) {
                                   Navigator.pop(context);
                                 } else {
-                                  //aler dialog pop;
+                                  logger.e('error');
                                 }
                               },
                             ),

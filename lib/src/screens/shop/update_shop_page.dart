@@ -38,9 +38,9 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
   DateTime date;
   TimeOfDay opentime, closetime;
 
-  Shop newShop = new Shop();
-  Contact newContact = new Contact();
-  Address newAddress = new Address();
+  Shop newShop = Shop();
+  Contact newContact = Contact();
+  Address newAddress = Address();
 
   LocationData startLocation;
   LocationData _currentLocation;
@@ -136,6 +136,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
         "open": opentime.format(context),
         "close": closetime.format(context)
       },
+      "updatedAt": DateTime.now().millisecondsSinceEpoch
     };
 
     logger.v(data);
@@ -191,14 +192,14 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
           var _openMinute = document['operation']['open'].split(":")[1];
           TimeOfDay _openTime = TimeOfDay(
             hour: int.parse(_openHour),
-            minute: int.parse(_openMinute),
+            minute: int.parse(_openMinute.split(" ")[0]),
           );
 
           var _closeHour = document['operation']['close'].split(":")[0];
           var _closeMinute = document['operation']['close'].split(":")[1];
           TimeOfDay _closeTime = TimeOfDay(
             hour: int.parse(_closeHour),
-            minute: int.parse(_closeMinute),
+            minute: int.parse(_closeMinute.split(" ")[0]),
           );
           return Form(
             key: _formKey,
@@ -231,7 +232,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'กรุณาป้อนที่อยู่',
-                              labelText: '���อยู่',
+                              labelText: 'ที่อยู่',
                               prefixIcon: const Icon(
                                 Icons.home,
                               ),
@@ -243,7 +244,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                             initialValue: document['contact']['mobilePhone'],
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              hintText: 'กรุณาป้อนเ��อร์โทรศัพท์',
+                              hintText: 'กรุณาป้อนเบอร์โทรศัพท์',
                               labelText: 'เบอร์โทรศัพท์',
                               prefixIcon: const Icon(
                                 Icons.phone,
@@ -258,7 +259,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                             initialValue: document['description'],
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              hintText: 'กรุณาป้อนรายละเ���ยดร้าน',
+                              hintText: 'กรุณาป้อนรายละเอียดร้าน',
                               labelText: 'รายละเอียดร้าน',
                               prefixIcon: const Icon(
                                 Icons.library_books,
@@ -268,29 +269,30 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                           ),
                           buildSizedBox(),
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Radio(
-                                  value: 0,
-                                  groupValue: _radioValue1,
-                                  onChanged: _handleRadioValueChange1,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Radio(
+                                value: 0,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              Text(
+                                'อู่รถยนต์',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                              Radio(
+                                value: 1,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              Text(
+                                'อู่มอเตอร์ไซด์',
+                                style: TextStyle(
+                                  fontSize: 16.0,
                                 ),
-                                Text(
-                                  'อู่รถยนต์',
-                                  style: TextStyle(fontSize: 16.0),
-                                ),
-                                Radio(
-                                  value: 1,
-                                  groupValue: _radioValue1,
-                                  onChanged: _handleRadioValueChange1,
-                                ),
-                                Text(
-                                  'อู่มอเตอร์ไซด์',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ]),
+                              ),
+                            ],
+                          ),
                           buildSizedBox(),
                           TimePickerFormField(
                             initialValue: _openTime,
@@ -316,15 +318,15 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                             onChanged: (t) => setState(() => closetime = t),
                           ),
                           buildSizedBox(),
-                          RaisedButton(
+                          FlatButton(
                               child: Center(
-                                child: Text('เรียกตำแหน่งที่ตั้ง',
-                                    style: TextStyle(fontSize: 20)),
+                                child: Text(
+                                  'เรียกตำแหน่งที่ตั้ง',
+                                  style: TextStyle(fontSize: 20),
+                                ),
                               ),
                               color: Colors.orange[200],
-                              onPressed: () {
-                                _initPlatformState();
-                              }),
+                              onPressed: () => _initPlatformState()),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
@@ -340,6 +342,16 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                               ),
                             ],
                           ),
+                          FlatButton(
+                            onPressed: getImageFromCam,
+                            color: Colors.blue[200],
+                            child: Center(
+                              child: Text(
+                                'เลือกรูปภาพ',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -350,13 +362,6 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                   child: _image == null
                                       ? Text('กรุณาเลือกรูปภาพ')
                                       : Image.file(_image),
-                                ),
-                              ),
-                              FloatingActionButton(
-                                onPressed: getImageFromCam,
-                                tooltip: 'Pick Image',
-                                child: Icon(
-                                  Icons.add_a_photo,
                                 ),
                               ),
                             ],
@@ -382,6 +387,8 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                     widget.provinceId, widget.districtId);
                                 if (done) {
                                   Navigator.pop(context);
+                                } else {
+                                  logger.e('error');
                                 }
                               },
                             ),

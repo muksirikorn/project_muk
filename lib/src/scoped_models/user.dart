@@ -6,6 +6,8 @@ class User extends Model {
   String role = 'USER';
   String token;
 
+  List<String> admins = ['mukmind369@gmail.com', 'krseisenh@gmail.com'];
+
   User({this.username, this.email, this.role, this.token});
 
   String get userRole {
@@ -17,7 +19,7 @@ class User extends Model {
   }
 
   void updateUserRole(String email) {
-    if (email == 'mukmind369@gmail.com') {
+    if (admins.contains(email)) {
       role = 'ADMIN';
     } else {
       role = 'USER';
