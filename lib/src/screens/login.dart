@@ -216,11 +216,12 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: true,
         autofocus: false,
         decoration: InputDecoration(
-            hintText: 'Password',
-            icon: Icon(
-              Icons.lock,
-              color: Colors.grey,
-            )),
+          hintText: 'Password',
+          icon: Icon(
+            Icons.lock,
+            color: Colors.grey,
+          ),
+        ),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
         onSaved: (value) => _password = value.trim(),
       ),

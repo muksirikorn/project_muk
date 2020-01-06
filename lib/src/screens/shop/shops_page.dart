@@ -35,17 +35,22 @@ class _ShopsPageState extends State<ShopsPage> {
     Navigator.pop(context);
   }
 
-  Widget checkAuth(String role) {
+  Widget checkRole(String role) {
     if (role == 'ADMIN') {
       return IconButton(
         icon: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return NewShopPage(
-              provinceId: widget.provinceId,
-              districtId: widget.districtId,
-            );
-          }));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return NewShopPage(
+                  provinceId: widget.provinceId,
+                  districtId: widget.districtId,
+                );
+              },
+            ),
+          );
         },
       );
     }
@@ -55,14 +60,14 @@ class _ShopsPageState extends State<ShopsPage> {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(
-        builder: (BuildContext context, Widget child, User model) {
-      return Scaffold(
+      builder: (BuildContext context, Widget child, User model) {
+        return Scaffold(
           backgroundColor: AppTheme.GG_COLOR,
           appBar: AppBar(
             backgroundColor: AppTheme.GREEN_COLOR,
             centerTitle: true,
             title: Text(widget.provinceName),
-            actions: <Widget>[checkAuth(model.role)],
+            actions: <Widget>[checkRole(model.role)],
           ),
           body: StreamBuilder<QuerySnapshot>(
             stream: Firestore.instance
@@ -71,67 +76,67 @@ class _ShopsPageState extends State<ShopsPage> {
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError)
-                return Center(child: Text('Error: ${snapshot.error}'));
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  return Center(
-                      child: Text('Loading...',
-                          style: TextStyle(color: Colors.black)));
+                  return Center(child: CircularProgressIndicator());
                 default:
-                  return ListView(
-                    children: snapshot.data.documents
-                        .map((DocumentSnapshot document) {
-                      return Card(
-                        elevation: 8.0,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 6.0),
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.white30),
-                          // color: Color.fromRGBO(64, 75, 96, .9)),
-                          child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 10.0),
-                              leading: Container(
+                  if (snapshot.hasData) {
+                    return ListView(
+                      children: snapshot.data.documents.map(
+                        (DocumentSnapshot document) {
+                          return Card(
+                            elevation: 8.0,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 6.0),
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white30),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 10.0),
+                                leading: Container(
                                   padding: EdgeInsets.only(right: 12.0),
                                   decoration: BoxDecoration(
-                                      border: Border(
-                                          right: BorderSide(
-                                              width: 1.0,
-                                              color: Colors.white24))),
+                                    border: Border(
+                                      right: BorderSide(
+                                          width: 1.0, color: Colors.white24),
+                                    ),
+                                  ),
                                   child: Image.network(
-                                      document['images'][0]['src'])),
-                              title: Text(
-                                document['name'],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Row(
-                                children: <Widget>[
-                                  Flexible(
-                                    child: Text(document['description'],
-                                        style: TextStyle(color: Colors.black)),
-                                  )
-                                ],
-                              ),
-                              trailing: Icon(Icons.keyboard_arrow_right,
-                                  color: Colors.black, size: 30.0),
-                              onTap: () {
-                                Navigator.push(
+                                    document['images'][0]['src'],
+                                  ),
+                                ),
+                                title: Text(
+                                  document['name'],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: Text(
+                                        document['description'],
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                trailing: Icon(Icons.keyboard_arrow_right,
+                                    color: Colors.black, size: 30.0),
+                                onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ShopDetailPage(
-                                            docID: document.documentID,
-                                            documentName: document['name'],
-                                            provinceId: widget.provinceId,
-                                            districtId: widget.districtId,
-                                          )),
-                                );
-                              },
-                              onLongPress: () {
-                                if (model.role == 'ADMIN') {
-                                  showDialog(
+                                    builder: (context) => ShopDetailPage(
+                                      docID: document.documentID,
+                                      documentName: document['name'],
+                                      provinceId: widget.provinceId,
+                                      districtId: widget.districtId,
+                                    ),
+                                  ),
+                                ),
+                                onLongPress: () {
+                                  if (model.role == 'ADMIN') {
+                                    showDialog(
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
@@ -139,10 +144,11 @@ class _ShopsPageState extends State<ShopsPage> {
                                           content: Text('ลบข้อมูลร้าน'),
                                           actions: <Widget>[
                                             FlatButton(
-                                                onPressed: () {
-                                                  _dismissDialog();
-                                                },
-                                                child: Text('ยกเลิก')),
+                                              onPressed: () {
+                                                _dismissDialog();
+                                              },
+                                              child: Text('ยกเลิก'),
+                                            ),
                                             FlatButton(
                                               onPressed: () {
                                                 Firestore.instance
@@ -156,16 +162,25 @@ class _ShopsPageState extends State<ShopsPage> {
                                             )
                                           ],
                                         );
-                                      });
-                                }
-                              }),
-                        ),
-                      );
-                    }).toList(),
-                  );
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Container();
+                  }
               }
+              return Center(child: CircularProgressIndicator());
             },
-          ));
-    });
+          ),
+        );
+      },
+    );
   }
 }

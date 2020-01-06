@@ -18,7 +18,6 @@ import '../../theme/app_themes.dart';
 import '../../services/image_service.dart';
 import '../../services/logging_service.dart';
 
-import '../home.dart';
 import '../../components/shared_components.dart';
 
 class NewShopPage extends StatefulWidget {
@@ -34,15 +33,10 @@ class NewShopPage extends StatefulWidget {
 class _NewShopPageState extends State<NewShopPage> {
   File _image;
 
-  Future getImageFromCam() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _image = image;
-    });
-  }
-
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final timeFormat = DateFormat.Hm();
+  final databaseReference = Firestore.instance;
+
   DateTime date;
   TimeOfDay opentime, closetime;
 
@@ -66,7 +60,6 @@ class _NewShopPageState extends State<NewShopPage> {
   @override
   void initState() {
     super.initState();
-
     _initPlatformState();
   }
 
@@ -125,7 +118,15 @@ class _NewShopPageState extends State<NewShopPage> {
     });
   }
 
+  Future<void> getImageFromCam() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
   Future<bool> _submitForm(String provinceId, String districtId) async {
+    bool complete = false;
     final FormState form = _formKey.currentState;
     form.save();
     String imgUrl = await ImageServices().onImageUploading(_image);
@@ -155,9 +156,16 @@ class _NewShopPageState extends State<NewShopPage> {
 
     logger.v(data);
 
-    await Firestore.instance.collection('store').document().setData(data);
+    try {
+      DocumentReference docRef =
+          await databaseReference.collection('store').add(data);
+      logger.v(docRef);
+      complete = true;
+    } catch (e) {
+      logger.e(e);
+    }
 
-    return true;
+    return complete;
   }
 
   @override
@@ -331,10 +339,9 @@ class _NewShopPageState extends State<NewShopPage> {
                                 bool done = await _submitForm(
                                     widget.provinceId, widget.districtId);
                                 if (done) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return HomePage();
-                                  }));
+                                  Navigator.pop(context);
+                                } else {
+                                  //aler dialog pop;
                                 }
                               },
                             ),

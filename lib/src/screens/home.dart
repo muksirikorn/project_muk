@@ -89,42 +89,53 @@ class _HomePageState extends State<HomePage> {
 
   Widget dataView(String type) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection('image')
-            .where("type", isEqualTo: type)
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(
-                  child: Text('Loading...',
-                      style: TextStyle(color: Colors.black)));
-            default:
+      stream: Firestore.instance
+          .collection('image')
+          .where("type", isEqualTo: type)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+            break;
+          default:
+            if (snapshot.hasData) {
               return Container(
-                  child: GridView.builder(
-                      itemCount: snapshot.data.documents.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          child: Card(
-                            elevation: 5.0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Image.network(
-                                snapshot.data.documents[index]['images'][0]
-                                    ['src'],
-                                width: 300,
-                                height: 300,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
+                child: GridView.builder(
+                  itemCount: snapshot.data.documents.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      child: Card(
+                        elevation: 5.0,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Image.network(
+                            snapshot.data.documents[index]['images'][0]['src'],
+                            width: 300,
+                            height: 300,
+                            fit: BoxFit.fill,
                           ),
-                        );
-                      }));
-          }
-        });
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Container();
+            }
+            break;
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 
   Widget homeCar() {

@@ -22,57 +22,59 @@ class _DistrictPageState extends State<DistrictPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppTheme.WHITE_COLOR,
-        appBar: AppBar(
-          backgroundColor: AppTheme.GREEN_COLOR,
-          centerTitle: true,
-          title: Text(widget.provinceName),
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: Firestore.instance
-              .collection('districts')
-              .where('province_id', isEqualTo: widget.provinceId)
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError)
-              return Center(child: Text('Error: ${snapshot.error}'));
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(
-                    child: Text('Loading...',
-                        style: TextStyle(color: Colors.black)));
-              default:
+      backgroundColor: AppTheme.WHITE_COLOR,
+      appBar: AppBar(
+        backgroundColor: AppTheme.GREEN_COLOR,
+        centerTitle: true,
+        title: Text(widget.provinceName),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('districts')
+            .where('province_id', isEqualTo: widget.provinceId)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasData) {
                 return ListView(
-                  children:
-                      snapshot.data.documents.map((DocumentSnapshot document) {
-                    return ListTile(
-                      title: Text(
-                        document['name'],
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      trailing: Icon(
-                        Icons.keyboard_arrow_right,
-                        color: Colors.black,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ShopsPage(
-                                  provinceId: widget.provinceId,
-                                  provinceName: widget.provinceName,
-                                  districtName: document['name'],
-                                  districtId: document.documentID,
-                                ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
+                  children: snapshot.data.documents.map(
+                    (DocumentSnapshot document) {
+                      return ListTile(
+                        title: Text(
+                          document['name'],
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.black,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShopsPage(
+                                provinceId: widget.provinceId,
+                                provinceName: widget.provinceName,
+                                districtName: document['name'],
+                                districtId: document.documentID,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ).toList(),
                 );
-            }
-          },
-        ));
+              } else if (snapshot.hasError) {
+                return Container();
+              }
+          }
+          return Center(child: Text('Error: ${snapshot.error}'));
+        },
+      ),
+    );
   }
 }

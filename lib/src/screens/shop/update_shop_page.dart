@@ -15,7 +15,6 @@ import '../../theme/app_themes.dart';
 import '../../services/image_service.dart';
 import '../../services/logging_service.dart';
 
-import '../home.dart';
 import '../../components/shared_components.dart';
 
 class UpdateShopPage extends StatefulWidget {
@@ -32,15 +31,10 @@ class UpdateShopPage extends StatefulWidget {
 class _UpdateShopPageState extends State<UpdateShopPage> {
   File _image;
 
-  Future getImageFromCam() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _image = image;
-    });
-  }
-
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final timeFormat = DateFormat.Hm();
+  final databaseReference = Firestore.instance;
+
   DateTime date;
   TimeOfDay opentime, closetime;
 
@@ -108,10 +102,17 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
     });
   }
 
+  Future<void> getImageFromCam() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
   Future<bool> _submitForm(String provinceId, String districtId) async {
+    bool complete = false;
     final FormState form = _formKey.currentState;
     form.save();
-
     String imgUrl = await ImageServices().onImageUploading(_image);
 
     Map<String, dynamic> data = {
@@ -139,12 +140,17 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
 
     logger.v(data);
 
-    await Firestore.instance
-        .collection('store')
-        .document(widget.docID)
-        .updateData(data);
+    try {
+      await databaseReference
+          .collection('store')
+          .document(widget.docID)
+          .updateData(data);
+      complete = true;
+    } catch (e) {
+      logger.e(e);
+    }
 
-    return true;
+    return complete;
   }
 
   void _handleRadioValueChange1(int value) {
@@ -375,10 +381,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 bool done = await _submitForm(
                                     widget.provinceId, widget.districtId);
                                 if (done) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return HomePage();
-                                  }));
+                                  Navigator.pop(context);
                                 }
                               },
                             ),

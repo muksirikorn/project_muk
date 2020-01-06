@@ -41,7 +41,7 @@ android {
         applicationId "com.example.project_muk"
         minSdkVersion 21
         targetSdkVersion 28
-         multiDexEnabled true
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -69,5 +69,6 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.android.support:multidex:1.0.3'
 }
+
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
