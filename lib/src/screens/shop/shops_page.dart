@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project_muk/src/services/logging_service.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../theme/app_themes.dart';
 import '../../scoped_models/user.dart';
@@ -26,13 +27,21 @@ class ShopsPage extends StatefulWidget {
 }
 
 class _ShopsPageState extends State<ShopsPage> {
+  final databaseReference = Firestore.instance;
   @override
   void initState() {
     super.initState();
   }
 
-  _dismissDialog() {
-    Navigator.pop(context);
+  Future<bool> _deleteRecord(String documentId) async {
+    bool complete = false;
+    try {
+      databaseReference.collection('store').document(documentId).delete();
+      complete = true;
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return complete;
   }
 
   Widget checkRole(String role) {
@@ -145,19 +154,19 @@ class _ShopsPageState extends State<ShopsPage> {
                                           content: Text('ลบข้อมูลร้าน'),
                                           actions: <Widget>[
                                             FlatButton(
-                                              onPressed: () {
-                                                _dismissDialog();
-                                              },
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
                                               child: Text('ยกเลิก'),
                                             ),
                                             FlatButton(
-                                              onPressed: () {
-                                                Firestore.instance
-                                                    .collection('store')
-                                                    .document(
-                                                        document.documentID)
-                                                    .delete();
-                                                _dismissDialog();
+                                              onPressed: () async {
+                                                bool done = await _deleteRecord(
+                                                    document.documentID);
+                                                if (done) {
+                                                  Navigator.pop(context);
+                                                } else {
+                                                  logger.e('Fail to delete');
+                                                }
                                               },
                                               child: Text('ยืนยัน'),
                                             )

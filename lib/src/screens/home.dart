@@ -94,7 +94,6 @@ class _HomePageState extends State<HomePage> {
           .where("type", isEqualTo: type)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return Center(
