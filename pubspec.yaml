@@ -31,6 +31,7 @@ dependencies:
   firebase_crashlytics: ^0.1.2
   firebase_analytics: ^5.0.9
   logger: ^0.8.2
+  dart_geohash: ^1.0.2
 
 dev_dependencies:
   flutter_test:
