@@ -46,17 +46,20 @@ class DataSearch extends SearchDelegate<String> {
                 child: Center(
                   child: GestureDetector(
                     child: Card(
+                      color: Colors.orange[200],
                       child: Column(
                         children: <Widget>[
-                          Row(children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(7.0),
-                              child: Text(
-                                province.name,
-                                style: TextStyle(fontSize: 18.0),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(7.0),
+                                child: Text(
+                                  province.name,
+                                  style: TextStyle(fontSize: 18.0),
+                                ),
                               ),
-                            ),
-                          ]),
+                            ],
+                          ),
                         ],
                       ),
                     ),

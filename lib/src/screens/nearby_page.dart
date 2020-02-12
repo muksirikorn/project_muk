@@ -7,6 +7,10 @@ import 'package:project_muk/src/services/logging_service.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 
 class Nearby extends StatefulWidget {
+  Nearby(this.lat, this.lng);
+
+  final double lat;
+  final double lng;
   @override
   State<Nearby> createState() => NearbyState();
 }
@@ -28,7 +32,7 @@ class NearbyState extends State<Nearby> {
 
   void _fetchMarkers() async {
     var retriveMarker =
-        await ApiServices().fetchNearBy(1, 13.736717, 100.523186, 100000);
+        await ApiServices().fetchNearBy(1, widget.lat,widget.lng, 300000);
     for (var i = 0; i < retriveMarker.locations.length; i++) {
       // logger.d(retriveMarker.locations[i].info);
 
@@ -43,9 +47,9 @@ class NearbyState extends State<Nearby> {
       final Marker marker = Marker(
         markerId: markerId,
         position: LatLng(
-          LatLng(13.736717, 100.523186).latitude +
+          LatLng(widget.lat, widget.lng).latitude +
               sin(geolo[0] * pi / 10.0) / 20.0,
-          LatLng(13.736717, 100.523186).longitude +
+          LatLng(widget.lat, widget.lng).longitude +
               cos(geolo[1] * pi / 10.0) / 20.0,
         ),
       );
@@ -62,7 +66,7 @@ class NearbyState extends State<Nearby> {
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
-          target: LatLng(13.736717, 100.523186),
+          target: LatLng(widget.lat, widget.lng),
           zoom: 15,
         ),
         onMapCreated: _onMapCreated,

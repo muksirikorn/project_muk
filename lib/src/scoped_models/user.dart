@@ -6,7 +6,7 @@ class User extends Model {
   String role = 'USER';
   String token;
 
-  List<String> admins = ['mukmind369@gmail.com', 'krseisenh@gmail.com'];
+  List<String> admins = ['mukmind369@gmail.com', 'krseisenh@gmail.com','win12034@gmail.com'];
 
   User({this.username, this.email, this.role, this.token});
 

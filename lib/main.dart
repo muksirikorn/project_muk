@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/screens/home.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -33,9 +34,10 @@ class Home extends StatelessWidget {
         theme: AppTheme().appThemes(),
         debugShowCheckedModeBanner: false,
         title: "ค้นหาร้านซ่อมรถ",
-        home: Root(
-          auth: AuthServices(),
-        ),
+        home: HomePage(),
+        // home: Root(
+        //   auth: AuthServices(),
+        // ),
         navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
       ),
     );
