@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +34,8 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final timeFormat = DateFormat.Hm();
-  final databaseReference = Firestore.instance;
+  Geoflutterfire geo = Geoflutterfire();
+  final Firestore databaseReference = Firestore.instance;
 
   DateTime date;
   TimeOfDay opentime, closetime;
@@ -114,32 +116,33 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
     final FormState form = _formKey.currentState;
     form.save();
     String imgUrl = await ImageServices().onImageUploading(_image);
+    GeoFirePoint shopLocation = geo.point(
+      latitude: _currentLocation.latitude,
+      longitude: _currentLocation.longitude,
+    );
 
     Map<String, dynamic> data = {
-      "name": newShop.name,
-      "address": {
-        "detail": newAddress.detail,
-        "provicne_id": provinceId,
-        "districts_id": districtId,
+      'name': newShop.name,
+      'address': {
+        'detail': newAddress.detail,
+        'provicne_id': provinceId,
+        'districts_id': districtId,
       },
-      "images": [
-        {"src": imgUrl}
+      'images': [
+        {'src': imgUrl}
       ],
-      "contact": {"mobilePhone": newContact.mobilePhoneNumber},
-      "location": {
-        "lat": _currentLocation.latitude,
-        "lng": _currentLocation.longitude,
+      'contact': {
+        'mobilePhone': newContact.mobilePhoneNumber,
       },
-      "description": newShop.description,
-      "type": newShop.type,
-      "operation": {
-        "open": opentime.format(context),
-        "close": closetime.format(context)
+      'location': shopLocation.data,
+      'description': newShop.description,
+      'type': newShop.type,
+      'operation': {
+        'open': opentime.format(context),
+        'close': closetime.format(context)
       },
-      "updatedAt": DateTime.now().millisecondsSinceEpoch
+      'updatedAt': DateTime.now().millisecondsSinceEpoch
     };
-
-    logger.v(data);
 
     try {
       await databaseReference

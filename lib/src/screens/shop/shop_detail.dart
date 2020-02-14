@@ -110,6 +110,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                   break;
                 default:
                   if (snapshot.hasData) {
+                    GeoPoint point = snapshot.data['location']['geopoint'];
                     return SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
@@ -137,12 +138,13 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(
+                                          const Text(
                                             "ชื่อร้าน",
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Row(
                                             children: <Widget>[
@@ -150,35 +152,38 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                               SizedBox(
                                                 width: 5,
                                               ),
-                                              Text(snapshot.data['name'],
-                                                  style: TextStyle(
-                                                      color: Colors.black)),
+                                              Text(
+                                                snapshot.data['name'],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                top: 5, bottom: 5),
+                                              top: 5,
+                                              bottom: 5,
+                                            ),
                                             child: Divider(
                                               height: 2,
                                               color: Colors.grey.shade300,
                                             ),
                                           ),
-                                          Text(
+                                          const Text(
                                             "ที่อยู่",
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           GestureDetector(
                                             onTap: () {
                                               _openGoogleExternalMap(
-                                                  lat: snapshot.data['location']
-                                                          ['lat']
-                                                      .toString(),
-                                                  lng: snapshot.data['location']
-                                                          ['lng']
-                                                      .toString());
+                                                lat: point.latitude.toString(),
+                                                lng: point.longitude.toString(),
+                                              );
                                             },
                                             child: Row(
                                               children: <Widget>[
@@ -191,7 +196,8 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                     snapshot.data['address']
                                                         ['detail'],
                                                     style: TextStyle(
-                                                        color: Colors.black),
+                                                      color: Colors.black,
+                                                    ),
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
@@ -207,12 +213,13 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                               color: Colors.grey.shade300,
                                             ),
                                           ),
-                                          Text(
+                                          const Text(
                                             "โทร",
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Row(
                                             children: <Widget>[
@@ -223,14 +230,16 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                               GestureDetector(
                                                 onTap: () {
                                                   normal(
-                                                      snapshot.data['contact']
-                                                          ['mobilePhone']);
+                                                    snapshot.data['contact']
+                                                        ['mobilePhone'],
+                                                  );
                                                 },
                                                 child: Text(
                                                   snapshot.data['contact']
                                                       ['mobilePhone'],
                                                   style: TextStyle(
-                                                      color: Colors.black),
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -243,12 +252,13 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                               color: Colors.grey.shade300,
                                             ),
                                           ),
-                                          Text(
+                                          const Text(
                                             "รายละเอียด",
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Row(
                                             children: <Widget>[
@@ -260,25 +270,29 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 child: Text(
                                                   snapshot.data['description'],
                                                   style: TextStyle(
-                                                      color: Colors.black),
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                top: 5, bottom: 5),
+                                              top: 5,
+                                              bottom: 5,
+                                            ),
                                             child: Divider(
                                               height: 2,
                                               color: Colors.grey.shade300,
                                             ),
                                           ),
-                                          Text(
+                                          const Text(
                                             "รายละเอียด",
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Row(
                                             children: <Widget>[
@@ -287,10 +301,12 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                  snapshot.data['operation']
-                                                      ['open'],
-                                                  style: TextStyle(
-                                                      color: Colors.black)),
+                                                snapshot.data['operation']
+                                                    ['open'],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           Row(
@@ -300,10 +316,12 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                  snapshot.data['operation']
-                                                      ['close'],
-                                                  style: TextStyle(
-                                                      color: Colors.black)),
+                                                snapshot.data['operation']
+                                                    ['close'],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -324,8 +342,9 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                     mapType: MapType.normal,
                                     initialCameraPosition: CameraPosition(
                                       target: LatLng(
-                                          snapshot.data['location']['lat'],
-                                          snapshot.data['location']['lng']),
+                                        point.latitude,
+                                        point.longitude,
+                                      ),
                                       zoom: 15,
                                     ),
                                     onMapCreated: _onMapCreated,
@@ -333,8 +352,9 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                       Marker(
                                         markerId: MarkerId("1"),
                                         position: LatLng(
-                                            snapshot.data['location']['lat'],
-                                            snapshot.data['location']['lng']),
+                                          point.latitude,
+                                          point.longitude,
+                                        ),
                                       )
                                     },
                                   ),
@@ -349,7 +369,9 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                     return Container();
                   }
               }
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             },
           ),
         );

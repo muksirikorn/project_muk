@@ -1,106 +1,64 @@
-import 'dart:math';
-import 'dart:io';
-import 'dart:async';
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:project_muk/src/services/api_service.dart';
+import 'package:project_muk/src/root.dart';
+import 'package:project_muk/src/scoped_models/user.dart';
+import 'package:project_muk/src/screens/nearby_page.dart';
+import 'package:project_muk/src/screens/province_serach.dart';
+import 'package:project_muk/src/services/auth_service.dart';
 import 'package:project_muk/src/services/logging_service.dart';
-import 'package:dart_geohash/dart_geohash.dart';
-import 'package:location/location.dart';
-
-import '../theme/app_themes.dart';
-import '../services/auth_service.dart';
-import '../services/logging_service.dart';
-
-import '../scoped_models/user.dart';
-import 'province_serach.dart';
-import 'nearby_page.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 class HomePage extends StatefulWidget {
-  // HomePage(
-  //     {Key key, this.auth, this.userId, this.logoutCallback, this.userEmail,})
-  //     : super(key: key);
+  const HomePage({
+    Key key,
+    this.auth,
+    this.userId,
+    this.logoutCallback,
+    this.userEmail,
+    this.state,
+  }) : super(key: key);
 
-  HomePage({Key key}) : super(key: key);
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
+  final String userEmail;
+  final String state;
 
-  // final BaseAuth auth;
-  // final VoidCallback logoutCallback;
-  // final String userId;
-  // final String userEmail;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  Firestore _firestore = Firestore.instance;
   GoogleMapController mapController;
-  GeoHasher geoHasher = GeoHasher();
-  LocationData startLocation;
-  LocationData _currentLocation;
-
-  StreamSubscription<LocationData> _locationSubscription;
-
-  Location _locationService = Location();
-  bool _permission = false;
+  Geoflutterfire geo = Geoflutterfire();
+  Stream<List<DocumentSnapshot>> stream;
+  GeoFirePoint center;
   String error;
+  var collectionReference;
+
+  List<Widget> bikeList = [];
+  List<Widget> carList = [];
+
   @override
   void initState() {
     super.initState();
-    // _fetchMarkers();
-    _initPlatformState();
+    loadData('car');
+    loadData('bike');
   }
 
-  // void signOut() async {
-  //   try {
-  //     await widget.auth.signOut();
-  //     widget.logoutCallback();
-  //   } catch (e) {
-  //     logger.e(e);
-  //   }
-  // }
-
-  _initPlatformState() async {
-    await _locationService.changeSettings(
-        accuracy: LocationAccuracy.HIGH, interval: 1000);
-
-    LocationData location;
+  void signOut() async {
     try {
-      bool serviceStatus = await _locationService.serviceEnabled();
-      if (serviceStatus) {
-        _permission = await _locationService.requestPermission();
-        if (_permission) {
-          location = await _locationService.getLocation();
-
-          _locationSubscription = _locationService
-              .onLocationChanged()
-              .listen((LocationData result) async {
-            setState(() {
-              _currentLocation = result;
-            });
-          });
-        }
-      } else {
-        bool serviceStatusResult = await _locationService.requestService();
-        if (serviceStatusResult) {
-          _initPlatformState();
-        }
-      }
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        error = e.message;
-      } else if (e.code == 'SERVICE_STATUS_ERROR') {
-        error = e.message;
-      }
-      location = null;
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      logger.e(e);
     }
-
-    setState(() {
-      startLocation = location;
-    });
   }
 
   @override
@@ -115,13 +73,13 @@ class _HomePageState extends State<HomePage> {
               bottom: TabBar(
                 tabs: [
                   Tab(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.directions_car,
                       color: Colors.black,
                     ),
                   ),
                   Tab(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.directions_bike,
                       color: Colors.black,
                     ),
@@ -130,28 +88,38 @@ class _HomePageState extends State<HomePage> {
               ),
               automaticallyImplyLeading: false,
               backgroundColor: AppTheme.GREEN_COLOR,
-              title: Text('ร้านซ่อมรถ'),
+              title: const Text('ร้านซ่อมรถ'),
               actions: <Widget>[
                 FlatButton(
-                  child: Icon(
+                  child: const Icon(
                     Icons.near_me,
                     color: Colors.white,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Nearby(
-                          _currentLocation.latitude,
-                          _currentLocation.longitude,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Nearby(),
+                    ),
+                  ),
                 ),
-                // FlatButton(
-                //     child: Icon(Icons.exit_to_app, color: Colors.white),
-                //     onPressed: signOut,)
+                widget.state == 'LOG_IN'
+                    ? FlatButton(
+                        child: Icon(Icons.exit_to_app, color: Colors.white),
+                        onPressed: () => {
+                          signOut(),
+                        },
+                      )
+                    : FlatButton(
+                        child: Icon(Icons.person, color: Colors.white),
+                        onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Root(
+                              auth: AuthServices(),
+                            ),
+                          ),
+                        ),
+                      )
               ],
             ),
             body: TabBarView(
@@ -163,17 +131,18 @@ class _HomePageState extends State<HomePage> {
             floatingActionButton: FloatingActionButton.extended(
               tooltip: 'ค้นหา',
               onPressed: () async {
-                // model.updateUserRole(widget.userEmail);
+                model.updateUserRole(widget.userEmail);
                 showSearch(
                   context: context,
                   delegate: DataSearch(),
                 );
+                // signOut();
               },
               icon: Icon(
                 Icons.search,
                 color: Colors.black,
               ),
-              label: Text(
+              label: const Text(
                 "ค้นหา",
                 style: TextStyle(
                   color: Colors.black,
@@ -185,6 +154,55 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  Widget toggleIcon() {
+    return Container();
+  }
+
+  void loadData(String type) {
+    collectionReference =
+        _firestore.collection('store').where("type", isEqualTo: type);
+
+    Stream<List<DocumentSnapshot>> stream =
+        geo.collection(collectionRef: collectionReference).within(
+              center: geo.point(latitude: 13.7828896, longitude: 100.5661049),
+              radius: 50,
+              field: 'location',
+              strictMode: true,
+            );
+
+    stream.listen((List<DocumentSnapshot> documentList) {
+      documentList.forEach((DocumentSnapshot document) {
+        _addGrid(document, type);
+      });
+    });
+  }
+
+  void _addGrid(DocumentSnapshot document, String type) {
+    GeoPoint point = document.data['location']['geopoint'];
+    print(point.latitude);
+    var _marker = GestureDetector(
+      child: Card(
+        elevation: 5.0,
+        child: Container(
+          alignment: Alignment.center,
+          child: Image.network(
+            document.data['images'][0]['src'],
+            width: 300,
+            height: 300,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
+    setState(() {
+      if (type == 'car') {
+        carList.add(_marker);
+      } else {
+        bikeList.add(_marker);
+      }
+    });
   }
 
   Widget dataView(String type) {
@@ -203,10 +221,6 @@ class _HomePageState extends State<HomePage> {
             break;
           default:
             if (snapshot.hasData) {
-              // list []
-              // if data in 30 km?
-              // yes add to list
-              // build gridview
               return Container(
                 child: GridView.builder(
                   itemCount: snapshot.data.documents.length,
@@ -232,7 +246,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Container();
+              return SnackBar(
+                content: Text(
+                  snapshot.error.toString(),
+                ),
+              );
             }
             break;
         }
@@ -245,9 +263,29 @@ class _HomePageState extends State<HomePage> {
 
   Widget homeCar() {
     return dataView('car');
+    // print(carList);
+    // return Container(
+    //   child: GridView.count(
+    //     crossAxisCount: 2,
+    //     padding: EdgeInsets.all(8.0),
+    //     crossAxisSpacing: 8.0,
+    //     mainAxisSpacing: 5.0,
+    //     children: carList.map((data) => data).toList(),
+    //   ),
+    // );
   }
 
   Widget homeBike() {
     return dataView('bike');
+    // print(bikeList);
+    // return Container(
+    //   child: GridView.count(
+    //     crossAxisCount: 2,
+    //     padding: EdgeInsets.all(8.0),
+    //     crossAxisSpacing: 8.0,
+    //     mainAxisSpacing: 5.0,
+    //     children: bikeList.map((data) => data).toList(),
+    //   ),
+    // );
   }
 }

@@ -116,11 +116,12 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Verify your account"),
-          content: Text("Link to verify account has been sent to your email"),
+          title: const Text("Verify your account"),
+          content:
+              const Text("Link to verify account has been sent to your email"),
           actions: <Widget>[
             FlatButton(
-              child: Text("Dismiss"),
+              child: const Text("Dismiss"),
               onPressed: () {
                 toggleFormMode();
                 Navigator.of(context).pop();
@@ -157,10 +158,11 @@ class _LoginPageState extends State<LoginPage> {
       return Text(
         _errorMessage,
         style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
+          fontSize: 13.0,
+          color: Colors.red,
+          height: 1.0,
+          fontWeight: FontWeight.w300,
+        ),
       );
     } else {
       return Container(
@@ -198,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
         autofocus: false,
         decoration: InputDecoration(
             hintText: 'Email',
-            icon: Icon(
+            icon: const Icon(
               Icons.mail,
               color: Colors.grey,
             )),
@@ -217,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
         autofocus: false,
         decoration: InputDecoration(
           hintText: 'Password',
-          icon: Icon(
+          icon: const Icon(
             Icons.lock,
             color: Colors.grey,
           ),
@@ -230,16 +232,20 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget showSecondaryButton() {
     return FlatButton(
-        child: Text(
-          _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
-          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+      child: Text(
+        _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w300,
         ),
-        onPressed: toggleFormMode);
+      ),
+      onPressed: toggleFormMode,
+    );
   }
 
   Widget showPrimaryButton() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
       child: SizedBox(
         height: 40.0,
         child: RaisedButton(
@@ -247,10 +253,13 @@ class _LoginPageState extends State<LoginPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          color: Color(0xFF4CAF50),
+          color: const Color(0xFF4CAF50),
           child: Text(
             _isLoginForm ? 'Login' : 'Create account',
-            style: TextStyle(fontSize: 20.0, color: Colors.white),
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
           ),
           onPressed: validateAndSubmit,
         ),
