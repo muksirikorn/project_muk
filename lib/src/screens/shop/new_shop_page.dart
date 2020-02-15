@@ -1,36 +1,35 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:async';
-import 'package:flutter/services.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:location/location.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../../scoped_models/user.dart';
-import '../../models/store.dart';
+import '../../components/shared_components.dart';
 import '../../models/address.dart';
 import '../../models/contact.dart';
-
-import '../../theme/app_themes.dart';
+import '../../models/store.dart';
+import '../../scoped_models/user.dart';
 import '../../services/image_service.dart';
 import '../../services/logging_service.dart';
-
-import '../../components/shared_components.dart';
+import '../../theme/app_themes.dart';
 
 class NewShopPage extends StatefulWidget {
+  final String provinceId;
+
+  final String districtId;
   NewShopPage({
     Key key,
     this.provinceId,
     this.districtId,
   }) : super(key: key);
-
-  final String provinceId;
-  final String districtId;
 
   @override
   _NewShopPageState createState() => _NewShopPageState();
@@ -63,125 +62,6 @@ class _NewShopPageState extends State<NewShopPage> {
   bool currentWidget = true;
 
   int _radioValue1 = -1;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  _initPlatformState() async {
-    await _locationService.changeSettings(
-        accuracy: LocationAccuracy.HIGH, interval: 1000);
-
-    LocationData location;
-    try {
-      bool serviceStatus = await _locationService.serviceEnabled();
-      if (serviceStatus) {
-        _permission = await _locationService.requestPermission();
-        if (_permission) {
-          location = await _locationService.getLocation();
-
-          _locationSubscription = _locationService
-              .onLocationChanged()
-              .listen((LocationData result) async {
-            setState(() {
-              _currentLocation = result;
-            });
-          });
-        }
-      } else {
-        bool serviceStatusResult = await _locationService.requestService();
-        if (serviceStatusResult) {
-          _initPlatformState();
-        }
-      }
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        error = e.message;
-      } else if (e.code == 'SERVICE_STATUS_ERROR') {
-        error = e.message;
-      }
-      location = null;
-    }
-
-    setState(() {
-      startLocation = location;
-    });
-  }
-
-  void _handleRadioValueChange1(int value) {
-    setState(() {
-      _radioValue1 = value;
-
-      switch (_radioValue1) {
-        case 0:
-          newShop.type = 'car';
-          break;
-        case 1:
-          newShop.type = 'bike';
-          break;
-      }
-    });
-  }
-
-  Future<void> getImageFromCam() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _image = image;
-    });
-  }
-
-  Future<bool> _submitForm(String provinceId, String districtId) async {
-    bool complete = false;
-    final FormState form = _formKey.currentState;
-    form.save();
-    String imgUrl = await ImageServices().onImageUploading(_image);
-    GeoFirePoint shopLocation = geo.point(
-      latitude: _currentLocation.latitude,
-      longitude: _currentLocation.longitude,
-    );
-
-    Map<String, dynamic> data = {
-      'name': newShop.name,
-      'address': {
-        'detail': newAddress.detail,
-        'provicne_id': provinceId,
-        'districts_id': districtId,
-      },
-      'images': [
-        {
-          'src': imgUrl,
-        }
-      ],
-      'contact': {
-        'mobilePhone': newContact.mobilePhoneNumber,
-      },
-      'location': shopLocation.data,
-      'description': newShop.description,
-      'type': newShop.type,
-      'operation': {
-        'open': openTime.format(context),
-        'close': closeTime.format(context),
-      },
-      'createdAt': DateTime.now().millisecondsSinceEpoch,
-    };
-
-    try {
-      DocumentReference docRef =
-          await databaseReference.collection('store').add(data);
-      logger.v(docRef.documentID);
-      complete = true;
-    } catch (e) {
-      logger.e(e);
-    }
-
-    return complete;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -354,10 +234,12 @@ class _NewShopPageState extends State<NewShopPage> {
                                 ),
                               ),
                               onPressed: () async {
+                                showProcessingDialog(context);
                                 bool done = await _submitForm(
                                   widget.provinceId,
                                   widget.districtId,
                                 );
+                                Navigator.pop(context);
                                 done
                                     ? Navigator.pop(context)
                                     : logger.e('error');
@@ -375,5 +257,124 @@ class _NewShopPageState extends State<NewShopPage> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> getImageFromCam() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _handleRadioValueChange1(int value) {
+    setState(() {
+      _radioValue1 = value;
+
+      switch (_radioValue1) {
+        case 0:
+          newShop.type = 'car';
+          break;
+        case 1:
+          newShop.type = 'bike';
+          break;
+      }
+    });
+  }
+
+  _initPlatformState() async {
+    await _locationService.changeSettings(
+        accuracy: LocationAccuracy.HIGH, interval: 1000);
+
+    LocationData location;
+    try {
+      bool serviceStatus = await _locationService.serviceEnabled();
+      if (serviceStatus) {
+        _permission = await _locationService.requestPermission();
+        if (_permission) {
+          location = await _locationService.getLocation();
+
+          _locationSubscription = _locationService
+              .onLocationChanged()
+              .listen((LocationData result) async {
+            setState(() {
+              _currentLocation = result;
+            });
+          });
+        }
+      } else {
+        bool serviceStatusResult = await _locationService.requestService();
+        if (serviceStatusResult) {
+          _initPlatformState();
+        }
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = e.message;
+      } else if (e.code == 'SERVICE_STATUS_ERROR') {
+        error = e.message;
+      }
+      location = null;
+    }
+
+    setState(() {
+      startLocation = location;
+    });
+  }
+
+  Future<bool> _submitForm(String provinceId, String districtId) async {
+    bool complete = false;
+    final FormState form = _formKey.currentState;
+    form.save();
+    String imgUrl = await ImageServices().onImageUploading(_image);
+    GeoFirePoint shopLocation = geo.point(
+      latitude: _currentLocation.latitude,
+      longitude: _currentLocation.longitude,
+    );
+
+    Map<String, dynamic> data = {
+      'name': newShop.name,
+      'address': {
+        'detail': newAddress.detail,
+        'provicne_id': provinceId,
+        'districts_id': districtId,
+      },
+      'images': [
+        {
+          'src': imgUrl,
+        }
+      ],
+      'contact': {
+        'mobilePhone': newContact.mobilePhoneNumber,
+      },
+      'location': shopLocation.data,
+      'description': newShop.description,
+      'type': newShop.type,
+      'operation': {
+        'open': openTime.format(context),
+        'close': closeTime.format(context),
+      },
+      'createdAt': DateTime.now().millisecondsSinceEpoch,
+    };
+
+    try {
+      DocumentReference docRef =
+          await databaseReference.collection('store').add(data);
+      logger.v(docRef.documentID);
+      complete = true;
+    } catch (e) {
+      logger.e(e);
+    }
+
+    return complete;
   }
 }

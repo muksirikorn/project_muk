@@ -1,28 +1,24 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../theme/app_themes.dart';
+import 'package:flutter/material.dart';
+
 import './shop/shops_page.dart';
+import '../theme/app_themes.dart';
 
 class DistrictPage extends StatefulWidget {
+  final String provinceName;
+
+  final String provinceId;
   DistrictPage({
     Key key,
     this.provinceName,
     this.provinceId,
   }) : super(key: key);
 
-  final String provinceName;
-  final String provinceId;
-
   @override
   _DistrictPageState createState() => _DistrictPageState();
 }
 
 class _DistrictPageState extends State<DistrictPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,19 +52,17 @@ class _DistrictPageState extends State<DistrictPage> {
                           Icons.keyboard_arrow_right,
                           color: AppTheme.BLACK_COLOR,
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShopsPage(
-                                provinceId: widget.provinceId,
-                                provinceName: widget.provinceName,
-                                districtName: document['name'],
-                                districtId: document.documentID,
-                              ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShopsPage(
+                              provinceId: widget.provinceId,
+                              provinceName: widget.provinceName,
+                              districtName: document['name'],
+                              districtId: document.documentID,
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       );
                     },
                   ).toList(),
@@ -84,5 +78,10 @@ class _DistrictPageState extends State<DistrictPage> {
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

@@ -1,17 +1,23 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../theme/app_themes.dart';
 import '../../scoped_models/user.dart';
+import '../../theme/app_themes.dart';
 import 'update_shop_page.dart';
 
 class ShopDetailPage extends StatefulWidget {
+  final String docID;
+
+  final String documentName;
+  final String provinceId;
+  final String districtId;
   ShopDetailPage({
     Key key,
     this.docID,
@@ -20,11 +26,6 @@ class ShopDetailPage extends StatefulWidget {
     this.provinceId,
   }) : super(key: key);
 
-  final String docID;
-  final String documentName;
-  final String provinceId;
-  final String districtId;
-
   @override
   _ShopDetailPageState createState() => _ShopDetailPageState();
 }
@@ -32,58 +33,9 @@ class ShopDetailPage extends StatefulWidget {
 class _ShopDetailPageState extends State<ShopDetailPage> {
   GoogleMapController mapController;
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  normal(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  Future _openGoogleExternalMap({String lat, String lng}) async {
-    bool launchable =
-        await canLaunch('https://maps.google.com/?z=12&q=$lat,$lng');
-    if (launchable) {
-      await launch('https://maps.google.com/?z=12&q=$lat,$lng');
-    } else {
-      return SnackBar(
-        content: Text('Can not open urls'),
-      );
-    }
-  }
-
   String lat;
-  String lng;
 
-  Widget checkAuth(String role) {
-    if (role == 'ADMIN') {
-      return IconButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UpdateShopPage(
-                docID: widget.docID,
-                provinceId: widget.provinceId,
-                districtId: widget.districtId,
-              ),
-            ),
-          );
-        },
-        icon: Icon(Icons.edit, color: Colors.white),
-      );
-    }
-    return Container();
-  }
+  String lng;
 
   @override
   Widget build(BuildContext context) {
@@ -379,5 +331,55 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
         );
       },
     );
+  }
+
+  Widget checkAuth(String role) {
+    if (role == 'ADMIN') {
+      return IconButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UpdateShopPage(
+                docID: widget.docID,
+                provinceId: widget.provinceId,
+                districtId: widget.districtId,
+              ),
+            ),
+          );
+        },
+        icon: Icon(Icons.edit, color: Colors.white),
+      );
+    }
+    return Container();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  normal(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  Future _openGoogleExternalMap({String lat, String lng}) async {
+    bool launchable =
+        await canLaunch('https://maps.google.com/?z=12&q=$lat,$lng');
+    if (launchable) {
+      await launch('https://maps.google.com/?z=12&q=$lat,$lng');
+    } else {
+      return SnackBar(
+        content: Text('Can not open urls'),
+      );
+    }
   }
 }

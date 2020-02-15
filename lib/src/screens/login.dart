@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:project_muk/src/theme/app_themes.dart';
 import 'package:scoped_model/scoped_model.dart';
+
 import '../scoped_models/user.dart';
-import '../services/logging_service.dart';
 import '../services/auth_service.dart';
+import '../services/logging_service.dart';
 
 class LoginPage extends StatefulWidget {
+  final BaseAuth auth;
+
+  final VoidCallback loginCallback;
   LoginPage({
     Key key,
     this.auth,
     this.loginCallback,
   });
-
-  final BaseAuth auth;
-  final VoidCallback loginCallback;
 
   @override
   State<StatefulWidget> createState() => _LoginPageState();
@@ -28,67 +29,6 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoginForm;
   bool _isLoading;
-
-  bool validateAndSave() {
-    final form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      return true;
-    }
-    return false;
-  }
-
-  void validateAndSubmit() async {
-    setState(() {
-      _errorMessage = "";
-      _isLoading = true;
-    });
-    if (validateAndSave()) {
-      String userId = "";
-      try {
-        if (_isLoginForm) {
-          userId = await widget.auth.signIn(_email, _password);
-        } else {
-          userId = await widget.auth.signUp(_email, _password);
-          widget.auth.sendEmailVerification();
-          _showVerifyEmailSentDialog();
-        }
-        setState(() {
-          _isLoading = false;
-        });
-        if (userId.length > 0 && userId != null && _isLoginForm) {
-          widget.loginCallback();
-        }
-      } catch (e) {
-        logger.e(e);
-        setState(() {
-          _isLoading = false;
-          _errorMessage = e.message;
-          _formKey.currentState.reset();
-        });
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    _errorMessage = "";
-    _isLoading = false;
-    _isLoginForm = true;
-    super.initState();
-  }
-
-  void resetForm() {
-    _formKey.currentState.reset();
-    _errorMessage = "";
-  }
-
-  void toggleFormMode() {
-    resetForm();
-    setState(() {
-      _isLoginForm = !_isLoginForm;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,54 +46,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _showCircularProgress() {
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
-    return Container(
-      height: 0.0,
-      width: 0.0,
-    );
+  @override
+  void initState() {
+    _errorMessage = "";
+    _isLoading = false;
+    _isLoginForm = true;
+    super.initState();
   }
 
-  void _showVerifyEmailSentDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Verify your account"),
-          content:
-              const Text("Link to verify account has been sent to your email"),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text("Dismiss"),
-              onPressed: () {
-                toggleFormMode();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void resetForm() {
+    _formKey.currentState.reset();
+    _errorMessage = "";
   }
 
-  Widget _showForm() {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            showLogo(),
-            showEmailInput(),
-            showPasswordInput(),
-            showPrimaryButton(),
-            showSecondaryButton(),
-            showErrorMessage(),
-          ],
+  Widget showEmailInput() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+      child: TextFormField(
+        maxLines: 1,
+        keyboardType: TextInputType.emailAddress,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: 'Email',
+          icon: const Icon(
+            Icons.mail,
+            color: AppTheme.GREY_COLOR,
+          ),
         ),
+        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+        onSaved: (value) => _email = value.trim(),
       ),
     );
   }
@@ -196,26 +117,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget showEmailInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.emailAddress,
-        autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Email',
-          icon: const Icon(
-            Icons.mail,
-            color: AppTheme.GREY_COLOR,
-          ),
-        ),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        onSaved: (value) => _email = value.trim(),
-      ),
-    );
-  }
-
   Widget showPasswordInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
@@ -233,19 +134,6 @@ class _LoginPageState extends State<LoginPage> {
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
         onSaved: (value) => _password = value.trim(),
       ),
-    );
-  }
-
-  Widget showSecondaryButton() {
-    return FlatButton(
-      child: Text(
-        _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
-        style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-      onPressed: toggleFormMode,
     );
   }
 
@@ -270,6 +158,119 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: validateAndSubmit,
         ),
       ),
+    );
+  }
+
+  Widget showSecondaryButton() {
+    return FlatButton(
+      child: Text(
+        _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+      onPressed: toggleFormMode,
+    );
+  }
+
+  void toggleFormMode() {
+    resetForm();
+    setState(() {
+      _isLoginForm = !_isLoginForm;
+    });
+  }
+
+  bool validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  void validateAndSubmit() async {
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+    if (validateAndSave()) {
+      String userId = "";
+      try {
+        if (_isLoginForm) {
+          userId = await widget.auth.signIn(_email, _password);
+        } else {
+          userId = await widget.auth.signUp(_email, _password);
+          widget.auth.sendEmailVerification();
+          _showVerifyEmailSentDialog();
+        }
+        setState(() {
+          _isLoading = false;
+        });
+        if (userId.length > 0 && userId != null && _isLoginForm) {
+          widget.loginCallback();
+        }
+      } catch (e) {
+        logger.e(e);
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.message;
+          _formKey.currentState.reset();
+        });
+      }
+    }
+  }
+
+  Widget _showCircularProgress() {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
+  }
+
+  Widget _showForm() {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            showLogo(),
+            showEmailInput(),
+            showPasswordInput(),
+            showPrimaryButton(),
+            showSecondaryButton(),
+            showErrorMessage(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showVerifyEmailSentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Verify your account"),
+          content:
+              const Text("Link to verify account has been sent to your email"),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("Dismiss"),
+              onPressed: () {
+                toggleFormMode();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

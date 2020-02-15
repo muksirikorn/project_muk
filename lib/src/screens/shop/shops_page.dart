@@ -1,13 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:project_muk/src/services/logging_service.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../theme/app_themes.dart';
+
 import '../../scoped_models/user.dart';
-import 'shop_detail.dart';
+import '../../theme/app_themes.dart';
 import 'new_shop_page.dart';
+import 'shop_detail.dart';
 
 class ShopsPage extends StatefulWidget {
+  final String provinceId;
+
+  final String provinceName;
+  final String districtName;
+
+  final String districtId;
   ShopsPage({
     Key key,
     this.provinceId,
@@ -16,56 +23,12 @@ class ShopsPage extends StatefulWidget {
     this.districtId,
   }) : super(key: key);
 
-  final String provinceId;
-  final String provinceName;
-
-  final String districtName;
-  final String districtId;
-
   @override
   _ShopsPageState createState() => _ShopsPageState();
 }
 
 class _ShopsPageState extends State<ShopsPage> {
   final databaseReference = Firestore.instance;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<bool> _deleteRecord(String documentId) async {
-    bool complete = false;
-    try {
-      databaseReference.collection('store').document(documentId).delete();
-      complete = true;
-    } catch (e) {
-      logger.e(e.toString());
-    }
-    return complete;
-  }
-
-  Widget checkRole(String role) {
-    if (role == 'ADMIN') {
-      return IconButton(
-        icon: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return NewShopPage(
-                  provinceId: widget.provinceId,
-                  districtId: widget.districtId,
-                );
-              },
-            ),
-          );
-        },
-      );
-    }
-    return Container();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(
@@ -157,8 +120,9 @@ class _ShopsPageState extends State<ShopsPage> {
                                       builder: (context) {
                                         return AlertDialog(
                                           title: const Text(
-                                              'ต้องการลบข้อมูลร้าน?'),
-                                          content: const Text('ลบข้อมูลร้าน'),
+                                            'ต้องการลบข้อมูลร้าน?',
+                                          ),
+                                          content: const Text('ยืนยิน'),
                                           actions: <Widget>[
                                             FlatButton(
                                               onPressed: () =>
@@ -168,7 +132,8 @@ class _ShopsPageState extends State<ShopsPage> {
                                             FlatButton(
                                               onPressed: () async {
                                                 bool done = await _deleteRecord(
-                                                    document.documentID);
+                                                  document.documentID,
+                                                );
                                                 done
                                                     ? Navigator.pop(context)
                                                     : logger
@@ -199,5 +164,41 @@ class _ShopsPageState extends State<ShopsPage> {
         );
       },
     );
+  }
+
+  Widget checkRole(String role) {
+    if (role == 'ADMIN') {
+      return IconButton(
+        icon: Icon(Icons.add),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return NewShopPage(
+                provinceId: widget.provinceId,
+                districtId: widget.districtId,
+              );
+            },
+          ),
+        ),
+      );
+    }
+    return Container();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<bool> _deleteRecord(String documentId) async {
+    bool complete = false;
+    try {
+      databaseReference.collection('store').document(documentId).delete();
+      complete = true;
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return complete;
   }
 }

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:dart_geohash/dart_geohash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:project_muk/src/services/api_service.dart';
-import 'package:project_muk/src/services/logging_service.dart';
-import 'package:dart_geohash/dart_geohash.dart';
 import 'package:project_muk/src/theme/app_themes.dart';
 
 class Nearby extends StatefulWidget {
@@ -35,57 +34,47 @@ class NearbyState extends State<Nearby> {
   double lat, lng;
 
   @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: ready
+            ? Container(
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(lat, lng),
+                    zoom: 15,
+                  ),
+                  onMapCreated: _onMapCreated,
+                  markers: Set<Marker>.of(markers.values),
+                ),
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
+        floatingActionButton: FloatingActionButton.extended(
+          tooltip: 'ค้นหา',
+          onPressed: () => _fetchMarkers(),
+          icon: Icon(
+            Icons.refresh,
+            color: AppTheme.BLACK_COLOR,
+          ),
+          label: Text(
+            "Refresh",
+            style: TextStyle(
+              color: AppTheme.BLACK_COLOR,
+            ),
+          ),
+          backgroundColor: AppTheme.GREEN_COLOR,
+        ),
+      ),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _fetchMarkers();
-  }
-
-  Future _initPlatformState() async {
-    await _locationService.changeSettings(
-      accuracy: LocationAccuracy.HIGH,
-      interval: 1000,
-    );
-
-    LocationData location;
-    try {
-      bool serviceStatus = await _locationService.serviceEnabled();
-      if (serviceStatus) {
-        _permission = await _locationService.requestPermission();
-        if (_permission) {
-          location = await _locationService.getLocation();
-
-          _locationSubscription = _locationService
-              .onLocationChanged()
-              .listen((LocationData result) async {
-            setState(() {
-              _currentLocation = result;
-              lat = _currentLocation.latitude;
-              lng = _currentLocation.longitude;
-            });
-          });
-        }
-      } else {
-        bool serviceStatusResult = await _locationService.requestService();
-        if (serviceStatusResult) {
-          _initPlatformState();
-        }
-      }
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        error = e.message;
-      } else if (e.code == 'SERVICE_STATUS_ERROR') {
-        error = e.message;
-      }
-      location = null;
-    }
-
-    setState(() {
-      startLocation = location;
-    });
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
   }
 
   void _fetchMarkers() async {
@@ -139,41 +128,51 @@ class NearbyState extends State<Nearby> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: ready
-            ? Container(
-                child: GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(lat, lng),
-                    zoom: 15,
-                  ),
-                  onMapCreated: _onMapCreated,
-                  markers: Set<Marker>.of(markers.values),
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-        floatingActionButton: FloatingActionButton.extended(
-          tooltip: 'ค้นหา',
-          onPressed: () => _fetchMarkers(),
-          icon: Icon(
-            Icons.refresh,
-            color: AppTheme.BLACK_COLOR,
-          ),
-          label: Text(
-            "Refresh",
-            style: TextStyle(
-              color: AppTheme.BLACK_COLOR,
-            ),
-          ),
-          backgroundColor: AppTheme.GREEN_COLOR,
-        ),
-      ),
+  Future _initPlatformState() async {
+    await _locationService.changeSettings(
+      accuracy: LocationAccuracy.HIGH,
+      interval: 1000,
     );
+
+    LocationData location;
+    try {
+      bool serviceStatus = await _locationService.serviceEnabled();
+      if (serviceStatus) {
+        _permission = await _locationService.requestPermission();
+        if (_permission) {
+          location = await _locationService.getLocation();
+
+          _locationSubscription = _locationService
+              .onLocationChanged()
+              .listen((LocationData result) async {
+            setState(() {
+              _currentLocation = result;
+              lat = _currentLocation.latitude;
+              lng = _currentLocation.longitude;
+            });
+          });
+        }
+      } else {
+        bool serviceStatusResult = await _locationService.requestService();
+        if (serviceStatusResult) {
+          _initPlatformState();
+        }
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = e.message;
+      } else if (e.code == 'SERVICE_STATUS_ERROR') {
+        error = e.message;
+      }
+      location = null;
+    }
+
+    setState(() {
+      startLocation = location;
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 }
