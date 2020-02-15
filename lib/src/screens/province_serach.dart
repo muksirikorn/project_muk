@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
 import '../models/province.dart';
 import '../services/algolia_service.dart';
 import 'district.dart';
@@ -46,7 +47,7 @@ class DataSearch extends SearchDelegate<String> {
                 child: Center(
                   child: GestureDetector(
                     child: Card(
-                      color: Colors.orange[200],
+                      color: AppTheme.ORANGE_COLOR_200,
                       child: Column(
                         children: <Widget>[
                           Row(
@@ -67,8 +68,9 @@ class DataSearch extends SearchDelegate<String> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DistrictPage(
-                            provinceName: province.name,
-                            provinceId: province.documentID),
+                          provinceName: province.name,
+                          provinceId: province.documentID,
+                        ),
                       ),
                     ),
                   ),

@@ -75,13 +75,13 @@ class _HomePageState extends State<HomePage> {
                   Tab(
                     icon: const Icon(
                       Icons.directions_car,
-                      color: Colors.black,
+                      color: AppTheme.BLACK_COLOR,
                     ),
                   ),
                   Tab(
                     icon: const Icon(
                       Icons.directions_bike,
-                      color: Colors.black,
+                      color: AppTheme.BLACK_COLOR,
                     ),
                   ),
                 ],
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                 FlatButton(
                   child: const Icon(
                     Icons.near_me,
-                    color: Colors.white,
+                    color: AppTheme.WHITE_COLOR,
                   ),
                   onPressed: () => Navigator.pushReplacement(
                     context,
@@ -104,13 +104,19 @@ class _HomePageState extends State<HomePage> {
                 ),
                 widget.state == 'LOG_IN'
                     ? FlatButton(
-                        child: Icon(Icons.exit_to_app, color: Colors.white),
+                        child: Icon(
+                          Icons.exit_to_app,
+                          color: AppTheme.WHITE_COLOR,
+                        ),
                         onPressed: () => {
                           signOut(),
                         },
                       )
                     : FlatButton(
-                        child: Icon(Icons.person, color: Colors.white),
+                        child: Icon(
+                          Icons.person,
+                          color: AppTheme.WHITE_COLOR,
+                        ),
                         onPressed: () => Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -140,12 +146,12 @@ class _HomePageState extends State<HomePage> {
               },
               icon: Icon(
                 Icons.search,
-                color: Colors.black,
+                color: AppTheme.BLACK_COLOR,
               ),
               label: const Text(
                 "ค้นหา",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppTheme.BLACK_COLOR,
                 ),
               ),
               backgroundColor: AppTheme.GREEN_COLOR,

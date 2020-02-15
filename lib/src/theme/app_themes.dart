@@ -10,6 +10,7 @@ class AppTheme {
 
   static const Color PRIMARY_COLOR = Color(0xFF212121);
   static const Color ORANGE_COLOR = Color(0xFFD56343);
+  static const Color ORANGE_COLOR_200 = Color(0xFFFFCC80);
   static const Color B_COLOR = Color(0xFFC2EAF6);
   static const Color BK_COLOR = Color(0xFF686A73);
   static const Color GG_COLOR = Color(0xFFB9F6CA);
@@ -17,6 +18,12 @@ class AppTheme {
   static const Color WHITE_COLOR = Color(0xFFFFFFFF);
   static const Color BLACK_COLOR = Color(0xFF000000);
   static const Color GREEN_COLOR = Color(0xFF00C853);
+  static const Color BLUE_COLOR_200 = Color(0xFF90CAF9);
+  static const Color GREY_COLOR_300 = Color(0xFFE0E0E0);
+  static const Color GREY_COLOR = Color(0xFF9E9E9E);
+  static const Color RED_COLOR = Color(0xFFF44336);
+  static const Color WHITE_24_COLOR = Color(0x3DFFFFFF);
+  static const Color WHITE_30_COLOR = Color(0x4DFFFFFF);
 
   static const String PROMPT_REGULAR = 'Prompt_Regular';
   static const String PROMPT_MEDIUM = 'Prompt_Medium';

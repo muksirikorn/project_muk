@@ -11,6 +11,10 @@ import 'package:dart_geohash/dart_geohash.dart';
 import 'package:project_muk/src/theme/app_themes.dart';
 
 class Nearby extends StatefulWidget {
+  Nearby({
+    Key key,
+  }) : super(key: key);
+
   @override
   State<Nearby> createState() => NearbyState();
 }
@@ -24,14 +28,10 @@ class NearbyState extends State<Nearby> {
   LocationData _currentLocation;
 
   StreamSubscription<LocationData> _locationSubscription;
-
   Location _locationService = Location();
   bool _permission = false;
-
   String error;
-
   bool ready = false;
-
   double lat, lng;
 
   @override
@@ -163,12 +163,12 @@ class NearbyState extends State<Nearby> {
           onPressed: () => _fetchMarkers(),
           icon: Icon(
             Icons.refresh,
-            color: Colors.black,
+            color: AppTheme.BLACK_COLOR,
           ),
           label: Text(
             "Refresh",
             style: TextStyle(
-              color: Colors.black,
+              color: AppTheme.BLACK_COLOR,
             ),
           ),
           backgroundColor: AppTheme.GREEN_COLOR,

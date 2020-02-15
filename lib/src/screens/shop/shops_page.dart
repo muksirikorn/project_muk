@@ -8,13 +8,13 @@ import 'shop_detail.dart';
 import 'new_shop_page.dart';
 
 class ShopsPage extends StatefulWidget {
-  ShopsPage(
-      {Key key,
-      this.provinceId,
-      this.provinceName,
-      this.districtName,
-      this.districtId})
-      : super(key: key);
+  ShopsPage({
+    Key key,
+    this.provinceId,
+    this.provinceName,
+    this.districtName,
+    this.districtId,
+  }) : super(key: key);
 
   final String provinceId;
   final String provinceName;
@@ -99,7 +99,8 @@ class _ShopsPageState extends State<ShopsPage> {
                             margin: EdgeInsets.symmetric(
                                 horizontal: 10.0, vertical: 6.0),
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white30),
+                              decoration:
+                                  BoxDecoration(color: AppTheme.WHITE_30_COLOR),
                               child: ListTile(
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 10.0),
@@ -108,7 +109,9 @@ class _ShopsPageState extends State<ShopsPage> {
                                   decoration: BoxDecoration(
                                     border: Border(
                                       right: BorderSide(
-                                          width: 1.0, color: Colors.white24),
+                                        width: 1.0,
+                                        color: AppTheme.WHITE_24_COLOR,
+                                      ),
                                     ),
                                   ),
                                   child: Image.network(
@@ -118,21 +121,24 @@ class _ShopsPageState extends State<ShopsPage> {
                                 title: Text(
                                   document['name'],
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                    color: AppTheme.BLACK_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 subtitle: Row(
                                   children: <Widget>[
                                     Flexible(
                                       child: Text(
                                         document['description'],
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(
+                                          color: AppTheme.BLACK_COLOR,
+                                        ),
                                       ),
                                     )
                                   ],
                                 ),
                                 trailing: Icon(Icons.keyboard_arrow_right,
-                                    color: Colors.black, size: 30.0),
+                                    color: AppTheme.BLACK_COLOR, size: 30.0),
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -150,25 +156,25 @@ class _ShopsPageState extends State<ShopsPage> {
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
-                                          title: Text('ต้องการลบข้อมูลร้าน?'),
-                                          content: Text('ลบข้อมูลร้าน'),
+                                          title: const Text(
+                                              'ต้องการลบข้อมูลร้าน?'),
+                                          content: const Text('ลบข้อมูลร้าน'),
                                           actions: <Widget>[
                                             FlatButton(
                                               onPressed: () =>
                                                   Navigator.pop(context),
-                                              child: Text('ยกเลิก'),
+                                              child: const Text('ยกเลิก'),
                                             ),
                                             FlatButton(
                                               onPressed: () async {
                                                 bool done = await _deleteRecord(
                                                     document.documentID);
-                                                if (done) {
-                                                  Navigator.pop(context);
-                                                } else {
-                                                  logger.e('Fail to delete');
-                                                }
+                                                done
+                                                    ? Navigator.pop(context)
+                                                    : logger
+                                                        .e('Fail to delete');
                                               },
-                                              child: Text('ยืนยัน'),
+                                              child: const Text('ยืนยัน'),
                                             )
                                           ],
                                         );

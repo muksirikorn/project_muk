@@ -4,7 +4,11 @@ import '../theme/app_themes.dart';
 import './shop/shops_page.dart';
 
 class DistrictPage extends StatefulWidget {
-  DistrictPage({Key key, this.provinceName, this.provinceId}) : super(key: key);
+  DistrictPage({
+    Key key,
+    this.provinceName,
+    this.provinceId,
+  }) : super(key: key);
 
   final String provinceName;
   final String provinceId;
@@ -46,11 +50,11 @@ class _DistrictPageState extends State<DistrictPage> {
                       return ListTile(
                         title: Text(
                           document['name'],
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: AppTheme.BLACK_COLOR),
                         ),
                         trailing: Icon(
                           Icons.keyboard_arrow_right,
-                          color: Colors.black,
+                          color: AppTheme.BLACK_COLOR,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -74,7 +78,9 @@ class _DistrictPageState extends State<DistrictPage> {
               }
               break;
           }
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
         },
       ),
     );

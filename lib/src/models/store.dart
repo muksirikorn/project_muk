@@ -12,13 +12,14 @@ class Shop {
   double lat;
   double lng;
 
-  Shop(
-      {this.name,
-      this.address,
-      this.contact,
-      this.description,
-      this.operation,
-      this.lat,
-      this.lng,
-      this.type});
+  Shop({
+    this.name,
+    this.address,
+    this.contact,
+    this.description,
+    this.operation,
+    this.lat,
+    this.lng,
+    this.type,
+  });
 }

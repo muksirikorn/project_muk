@@ -19,12 +19,17 @@ import '../../services/logging_service.dart';
 import '../../components/shared_components.dart';
 
 class UpdateShopPage extends StatefulWidget {
-  UpdateShopPage({Key key, this.docID, this.provinceId, this.districtId})
-      : super(key: key);
+  UpdateShopPage({
+    Key key,
+    this.docID,
+    this.provinceId,
+    this.districtId,
+  }) : super(key: key);
 
   final String docID;
   final String provinceId;
   final String districtId;
+
   @override
   _UpdateShopPageState createState() => _UpdateShopPageState();
 }
@@ -227,7 +232,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 Icons.store_mall_directory,
                               ),
                             ),
-                            onSaved: (val) => newShop.name = val,
+                            onSaved: (val) => newShop.name = val.trim(),
                           ),
                           buildSizedBox(),
                           TextFormField(
@@ -240,7 +245,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 Icons.home,
                               ),
                             ),
-                            onSaved: (val) => newAddress.detail = val,
+                            onSaved: (val) => newAddress.detail = val.trim(),
                           ),
                           buildSizedBox(),
                           TextFormField(
@@ -255,7 +260,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                             ),
                             keyboardType: TextInputType.number,
                             onSaved: (val) =>
-                                newContact.mobilePhoneNumber = val,
+                                newContact.mobilePhoneNumber = val.trim(),
                           ),
                           buildSizedBox(),
                           TextFormField(
@@ -268,7 +273,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 Icons.library_books,
                               ),
                             ),
-                            onSaved: (val) => newShop.description = val,
+                            onSaved: (val) => newShop.description = val.trim(),
                           ),
                           buildSizedBox(),
                           Row(
@@ -279,7 +284,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 groupValue: _radioValue1,
                                 onChanged: _handleRadioValueChange1,
                               ),
-                              Text(
+                              const Text(
                                 'อู่รถยนต์',
                                 style: TextStyle(fontSize: 16.0),
                               ),
@@ -288,7 +293,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 groupValue: _radioValue1,
                                 onChanged: _handleRadioValueChange1,
                               ),
-                              Text(
+                              const Text(
                                 'อู่มอเตอร์ไซด์',
                                 style: TextStyle(
                                   fontSize: 16.0,
@@ -323,12 +328,12 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                           buildSizedBox(),
                           FlatButton(
                               child: Center(
-                                child: Text(
+                                child: const Text(
                                   'เรียกตำแหน่งที่ตั้ง',
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
-                              color: Colors.orange[200],
+                              color: AppTheme.ORANGE_COLOR_200,
                               onPressed: () => _initPlatformState()),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -338,18 +343,19 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 width: 200.0,
                                 child: Center(
                                   child: document['images'][0]['src'] == null
-                                      ? Text('No Image')
+                                      ? const Text('No Image')
                                       : Image.network(
-                                          document['images'][0]['src']),
+                                          document['images'][0]['src'],
+                                        ),
                                 ),
                               ),
                             ],
                           ),
                           FlatButton(
                             onPressed: getImageFromCam,
-                            color: Colors.blue[200],
+                            color: AppTheme.BLUE_COLOR_200,
                             child: Center(
-                              child: Text(
+                              child: const Text(
                                 'เลือกรูปภาพ',
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -363,7 +369,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                                 width: 200.0,
                                 child: Center(
                                   child: _image == null
-                                      ? Text('กรุณาเลือกรูปภาพ')
+                                      ? const Text('กรุณาเลือกรูปภาพ')
                                       : Image.file(_image),
                                 ),
                               ),
@@ -374,25 +380,24 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                             height: 50,
                             width: double.infinity,
                             child: RaisedButton(
-                              color: Color(0xFF4CAF50),
+                              color: AppTheme.GREEN_COLOR,
                               shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(5),
                               ),
-                              child: Text(
+                              child: const Text(
                                 "ยืนยัน",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                                  color: AppTheme.WHITE_COLOR,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               onPressed: () async {
                                 bool done = await _submitForm(
                                     widget.provinceId, widget.districtId);
-                                if (done) {
-                                  Navigator.pop(context);
-                                } else {
-                                  logger.e('error');
-                                }
+                                done
+                                    ? Navigator.pop(context)
+                                    : logger.e('error');
                               },
                             ),
                           ),

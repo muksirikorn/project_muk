@@ -12,18 +12,17 @@ import '../../scoped_models/user.dart';
 import 'update_shop_page.dart';
 
 class ShopDetailPage extends StatefulWidget {
-  ShopDetailPage(
-      {Key key,
-      this.docID,
-      this.documentName,
-      this.districtId,
-      this.provinceId})
-      : super(key: key);
+  ShopDetailPage({
+    Key key,
+    this.docID,
+    this.documentName,
+    this.districtId,
+    this.provinceId,
+  }) : super(key: key);
 
   final String docID;
   final String documentName;
   final String provinceId;
-
   final String districtId;
 
   @override
@@ -96,7 +95,9 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
             backgroundColor: AppTheme.GREEN_COLOR,
             centerTitle: true,
             title: Text(widget.documentName),
-            actions: <Widget>[checkAuth(model.userRole)],
+            actions: <Widget>[
+              checkAuth(model.userRole),
+            ],
           ),
           body: StreamBuilder(
             stream: Firestore.instance
@@ -142,7 +143,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                             "ชื่อร้าน",
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Colors.black,
+                                              color: AppTheme.BLACK_COLOR,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -155,7 +156,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                               Text(
                                                 snapshot.data['name'],
                                                 style: TextStyle(
-                                                  color: Colors.black,
+                                                  color: AppTheme.BLACK_COLOR,
                                                 ),
                                               ),
                                             ],
@@ -167,14 +168,14 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                             ),
                                             child: Divider(
                                               height: 2,
-                                              color: Colors.grey.shade300,
+                                              color: AppTheme.GREY_COLOR_300,
                                             ),
                                           ),
                                           const Text(
                                             "ที่อยู่",
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Colors.black,
+                                              color: AppTheme.BLACK_COLOR,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -196,7 +197,8 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                     snapshot.data['address']
                                                         ['detail'],
                                                     style: TextStyle(
-                                                      color: Colors.black,
+                                                      color:
+                                                          AppTheme.BLACK_COLOR,
                                                     ),
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -210,14 +212,14 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 top: 5, bottom: 5),
                                             child: Divider(
                                               height: 2,
-                                              color: Colors.grey.shade300,
+                                              color: AppTheme.GREY_COLOR_300,
                                             ),
                                           ),
                                           const Text(
                                             "โทร",
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Colors.black,
+                                              color: AppTheme.BLACK_COLOR,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -228,17 +230,15 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 width: 5,
                                               ),
                                               GestureDetector(
-                                                onTap: () {
-                                                  normal(
-                                                    snapshot.data['contact']
-                                                        ['mobilePhone'],
-                                                  );
-                                                },
+                                                onTap: () => normal(
+                                                  snapshot.data['contact']
+                                                      ['mobilePhone'],
+                                                ),
                                                 child: Text(
                                                   snapshot.data['contact']
                                                       ['mobilePhone'],
                                                   style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: AppTheme.BLACK_COLOR,
                                                   ),
                                                 ),
                                               ),
@@ -246,17 +246,19 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                top: 5, bottom: 5),
+                                              top: 5,
+                                              bottom: 5,
+                                            ),
                                             child: Divider(
                                               height: 2,
-                                              color: Colors.grey.shade300,
+                                              color: AppTheme.GREY_COLOR_300,
                                             ),
                                           ),
                                           const Text(
                                             "รายละเอียด",
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Colors.black,
+                                              color: AppTheme.BLACK_COLOR,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -270,7 +272,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 child: Text(
                                                   snapshot.data['description'],
                                                   style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: AppTheme.BLACK_COLOR,
                                                   ),
                                                 ),
                                               ),
@@ -283,14 +285,14 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                             ),
                                             child: Divider(
                                               height: 2,
-                                              color: Colors.grey.shade300,
+                                              color: AppTheme.GREY_COLOR_300,
                                             ),
                                           ),
                                           const Text(
                                             "รายละเอียด",
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Colors.black,
+                                              color: AppTheme.BLACK_COLOR,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -304,7 +306,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 snapshot.data['operation']
                                                     ['open'],
                                                 style: TextStyle(
-                                                  color: Colors.black,
+                                                  color: AppTheme.BLACK_COLOR,
                                                 ),
                                               ),
                                             ],
@@ -319,7 +321,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                                                 snapshot.data['operation']
                                                     ['close'],
                                                 style: TextStyle(
-                                                  color: Colors.black,
+                                                  color: AppTheme.BLACK_COLOR,
                                                 ),
                                               ),
                                             ],

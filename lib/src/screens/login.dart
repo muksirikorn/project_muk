@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/user.dart';
 import '../services/logging_service.dart';
 import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.auth, this.loginCallback});
+  LoginPage({
+    Key key,
+    this.auth,
+    this.loginCallback,
+  });
 
   final BaseAuth auth;
   final VoidCallback loginCallback;
@@ -159,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
         _errorMessage,
         style: TextStyle(
           fontSize: 13.0,
-          color: Colors.red,
+          color: AppTheme.RED_COLOR,
           height: 1.0,
           fontWeight: FontWeight.w300,
         ),
@@ -199,11 +204,12 @@ class _LoginPageState extends State<LoginPage> {
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: InputDecoration(
-            hintText: 'Email',
-            icon: const Icon(
-              Icons.mail,
-              color: Colors.grey,
-            )),
+          hintText: 'Email',
+          icon: const Icon(
+            Icons.mail,
+            color: AppTheme.GREY_COLOR,
+          ),
+        ),
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
         onSaved: (value) => _email = value.trim(),
       ),
@@ -221,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
           hintText: 'Password',
           icon: const Icon(
             Icons.lock,
-            color: Colors.grey,
+            color: AppTheme.GREY_COLOR,
           ),
         ),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
@@ -253,12 +259,12 @@ class _LoginPageState extends State<LoginPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          color: const Color(0xFF4CAF50),
+          color: AppTheme.GREEN_COLOR,
           child: Text(
             _isLoginForm ? 'Login' : 'Create account',
             style: TextStyle(
               fontSize: 20.0,
-              color: Colors.white,
+              color: AppTheme.WHITE_COLOR,
             ),
           ),
           onPressed: validateAndSubmit,
