@@ -7,9 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 
-import './src/root.dart';
 import './src/theme/app_themes.dart';
-import './src/services/auth_service.dart';
 import './src/scoped_models/user.dart';
 import './src/services/service_locator.dart';
 
@@ -35,9 +33,6 @@ class Home extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "ค้นหาร้านซ่อมรถ",
         home: HomePage(),
-        // home: Root(
-        //   auth: AuthServices(),
-        // ),
         navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
       ),
     );
