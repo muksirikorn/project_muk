@@ -4,13 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:project_muk/src/scoped_models/user.dart';
+import 'package:project_muk/src/screens/shop/update_shop_page.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../scoped_models/user.dart';
-import '../../theme/app_themes.dart';
-import 'update_shop_page.dart';
 
 class ShopDetailPage extends StatefulWidget {
   final String docID;

@@ -9,14 +9,13 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-
-import '../../components/shared_components.dart';
-import '../../models/address.dart';
-import '../../models/contact.dart';
-import '../../models/store.dart';
-import '../../services/image_service.dart';
-import '../../services/logging_service.dart';
-import '../../theme/app_themes.dart';
+import 'package:project_muk/src/components/shared_components.dart';
+import 'package:project_muk/src/models/address.dart';
+import 'package:project_muk/src/models/contact.dart';
+import 'package:project_muk/src/models/store.dart';
+import 'package:project_muk/src/services/image_service.dart';
+import 'package:project_muk/src/services/logging_service.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
 
 class UpdateShopPage extends StatefulWidget {
   final String docID;
@@ -212,14 +211,17 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                           ),
                           buildSizedBox(),
                           FlatButton(
-                              child: Center(
-                                child: const Text(
-                                  'เรียกตำแหน่งที่ตั้ง',
-                                  style: TextStyle(fontSize: 20),
-                                ),
+                            child: Center(
+                              child: const Text(
+                                'เรียกตำแหน่งที่ตั้ง',
+                                style: TextStyle(fontSize: 20),
                               ),
-                              color: AppTheme.ORANGE_COLOR_200,
-                              onPressed: () => _initPlatformState()),
+                            ),
+                            color: AppTheme.ORANGE_COLOR_200,
+                            onPressed: () async {
+                              await _initPlatformState();
+                            },
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
@@ -280,11 +282,13 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
                               onPressed: () async {
                                 showProcessingDialog(context);
                                 bool done = await _submitForm(
-                                    widget.provinceId, widget.districtId);
+                                  widget.provinceId,
+                                  widget.districtId,
+                                );
                                 Navigator.pop(context);
                                 done
                                     ? Navigator.pop(context)
-                                    : logger.e('error');
+                                    : Navigator.pop(context);
                               },
                             ),
                           ),
@@ -311,8 +315,6 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
   @override
   void initState() {
     super.initState();
-
-    _initPlatformState();
   }
 
   void _handleRadioValueChange1(int value) {
@@ -330,7 +332,7 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
     });
   }
 
-  _initPlatformState() async {
+  Future _initPlatformState() async {
     await _locationService.changeSettings(
         accuracy: LocationAccuracy.HIGH, interval: 1000);
 
@@ -341,19 +343,11 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
         _permission = await _locationService.requestPermission();
         if (_permission) {
           location = await _locationService.getLocation();
-
-          _locationSubscription = _locationService
-              .onLocationChanged()
-              .listen((LocationData result) async {
-            setState(() {
-              _currentLocation = result;
-            });
-          });
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
         if (serviceStatusResult) {
-          _initPlatformState();
+          await _initPlatformState();
         }
       }
     } on PlatformException catch (e) {
@@ -376,8 +370,8 @@ class _UpdateShopPageState extends State<UpdateShopPage> {
     form.save();
     String imgUrl = await ImageServices().onImageUploading(_image);
     GeoFirePoint shopLocation = geo.point(
-      latitude: _currentLocation.latitude,
-      longitude: _currentLocation.longitude,
+      latitude: startLocation.latitude,
+      longitude: startLocation.longitude,
     );
 
     Map<String, dynamic> data = {

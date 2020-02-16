@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import './shop/shops_page.dart';
-import '../theme/app_themes.dart';
+import 'package:project_muk/src/screens/shop/shops_page.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
 
 class DistrictPage extends StatefulWidget {
   final String provinceName;

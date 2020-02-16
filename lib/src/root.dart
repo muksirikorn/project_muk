@@ -4,8 +4,7 @@ import './screens/login.dart';
 import './screens/home.dart';
 
 enum AuthStatus {
-  NOT_DETERMINED,
-  NOT_LOGGED_IN,
+  LOGGED_OUT,
   LOGGED_IN,
 }
 
@@ -19,9 +18,10 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
+  AuthStatus authStatus = AuthStatus.LOGGED_OUT;
   String _userId = "";
   String _userEmail = "";
+  String _currentState;
 
   @override
   void initState() {
@@ -32,7 +32,9 @@ class _RootState extends State<Root> {
           _userId = user?.uid;
         }
         authStatus =
-            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+            user?.uid == null ? AuthStatus.LOGGED_OUT : AuthStatus.LOGGED_IN;
+
+        _currentState = user?.uid == null ? 'LOG_OUT' : 'LOG_IN';
       });
     });
   }
@@ -46,13 +48,15 @@ class _RootState extends State<Root> {
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
+      _currentState = 'LOG_IN';
     });
   }
 
   void logoutCallback() {
     setState(() {
-      authStatus = AuthStatus.NOT_LOGGED_IN;
+      authStatus = AuthStatus.LOGGED_OUT;
       _userId = "";
+      _currentState = 'LOG_OUT';
     });
   }
 
@@ -68,10 +72,16 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
-      case AuthStatus.NOT_DETERMINED:
-        return buildWaitingScreen();
-        break;
-      case AuthStatus.NOT_LOGGED_IN:
+      // case AuthStatus.NOT_DETERMINED:
+      //   return HomePage(
+      //     // userId: _userId,
+      //     // userEmail: _userEmail,
+      //     auth: widget.auth,
+      //     logoutCallback: logoutCallback,
+      //     state: 'LOG_OUT',
+      //   );
+      //   break;
+      case AuthStatus.LOGGED_OUT:
         return LoginPage(
           auth: widget.auth,
           loginCallback: loginCallback,
@@ -84,7 +94,7 @@ class _RootState extends State<Root> {
             userEmail: _userEmail,
             auth: widget.auth,
             logoutCallback: logoutCallback,
-            state: 'LOG_IN',
+            state: _currentState,
           );
         } else
           return buildWaitingScreen();

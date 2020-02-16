@@ -24,14 +24,10 @@ class NearbyState extends State<Nearby> {
   GeoHasher geoHasher = GeoHasher();
 
   LocationData startLocation;
-  LocationData _currentLocation;
-
-  StreamSubscription<LocationData> _locationSubscription;
   Location _locationService = Location();
   bool _permission = false;
   String error;
   bool ready = false;
-  double lat, lng;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +38,10 @@ class NearbyState extends State<Nearby> {
                 child: GoogleMap(
                   mapType: MapType.normal,
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(lat, lng),
+                    target: LatLng(
+                      startLocation.latitude,
+                      startLocation.longitude,
+                    ),
                     zoom: 15,
                   ),
                   onMapCreated: _onMapCreated,
@@ -77,27 +76,30 @@ class NearbyState extends State<Nearby> {
     _fetchMarkers();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void _fetchMarkers() async {
     await _initPlatformState();
 
-    setState(() {
-      ready = true;
-    });
     var retriveMarker;
 
-    if (lat != null && lng != null) {
+    if (startLocation != null) {
       retriveMarker = await ApiServices().fetchNearBy(
         1,
-        lat,
-        lng,
+        startLocation.latitude,
+        startLocation.longitude,
         300000,
       );
+
       final String markerIdVal = 'default_marker';
       final MarkerId markerId = MarkerId(markerIdVal);
 
       final Marker marker1 = Marker(
         markerId: markerId,
-        position: LatLng(lat, lng),
+        position: LatLng(startLocation.latitude, startLocation.longitude),
       );
 
       setState(() {
@@ -114,8 +116,10 @@ class NearbyState extends State<Nearby> {
         final Marker marker2 = Marker(
           markerId: markerId,
           position: LatLng(
-            LatLng(lat, lng).latitude + sin(geolo[0] * pi / 10.0) / 20.0,
-            LatLng(lat, lng).longitude + cos(geolo[1] * pi / 10.0) / 20.0,
+            LatLng(startLocation.latitude, startLocation.longitude).latitude +
+                sin(geolo[0] * pi / 10.0) / 20.0,
+            LatLng(startLocation.latitude, startLocation.longitude).longitude +
+                cos(geolo[1] * pi / 10.0) / 20.0,
           ),
         );
 
@@ -123,6 +127,9 @@ class NearbyState extends State<Nearby> {
           markers[markerId] = marker2;
         });
       }
+      setState(() {
+        ready = true;
+      });
     } else {
       retriveMarker = {"locations": []};
     }
@@ -141,21 +148,11 @@ class NearbyState extends State<Nearby> {
         _permission = await _locationService.requestPermission();
         if (_permission) {
           location = await _locationService.getLocation();
-
-          _locationSubscription = _locationService
-              .onLocationChanged()
-              .listen((LocationData result) async {
-            setState(() {
-              _currentLocation = result;
-              lat = _currentLocation.latitude;
-              lng = _currentLocation.longitude;
-            });
-          });
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
         if (serviceStatusResult) {
-          _initPlatformState();
+          await _initPlatformState();
         }
       }
     } on PlatformException catch (e) {
@@ -166,10 +163,11 @@ class NearbyState extends State<Nearby> {
       }
       location = null;
     }
-
-    setState(() {
-      startLocation = location;
-    });
+    if (this.mounted) {
+      setState(() {
+        startLocation = location;
+      });
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {

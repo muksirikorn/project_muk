@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/scoped_models/user.dart';
+import 'package:project_muk/src/screens/shop/new_shop_page.dart';
+import 'package:project_muk/src/screens/shop/shop_detail.dart';
 import 'package:project_muk/src/services/logging_service.dart';
+import 'package:project_muk/src/theme/app_themes.dart';
 import 'package:scoped_model/scoped_model.dart';
-
-import '../../scoped_models/user.dart';
-import '../../theme/app_themes.dart';
-import 'new_shop_page.dart';
-import 'shop_detail.dart';
 
 class ShopsPage extends StatefulWidget {
   final String provinceId;

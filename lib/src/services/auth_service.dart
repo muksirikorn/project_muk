@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'logging_service.dart';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -23,7 +22,6 @@ class AuthServices implements BaseAuth {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    logger.v(user);
     return user.uid;
   }
 
@@ -36,7 +34,6 @@ class AuthServices implements BaseAuth {
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
-    logger.v(user);
     return user;
   }
 

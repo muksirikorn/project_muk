@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/models/province.dart';
+import 'package:project_muk/src/screens/district.dart';
+import 'package:project_muk/src/services/algolia_service.dart';
 import 'package:project_muk/src/theme/app_themes.dart';
-import '../models/province.dart';
-import '../services/algolia_service.dart';
-import 'district.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final algoliaService = AlogoliaServices.instance;

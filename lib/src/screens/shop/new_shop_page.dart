@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,9 +50,6 @@ class _NewShopPageState extends State<NewShopPage> {
   Address newAddress = Address();
 
   LocationData startLocation;
-  LocationData _currentLocation;
-
-  StreamSubscription<LocationData> _locationSubscription;
 
   Location _locationService = Location();
   bool _permission = false;
@@ -262,6 +258,7 @@ class _NewShopPageState extends State<NewShopPage> {
   @override
   void dispose() {
     super.dispose();
+    _locationService.requestService();
   }
 
   Future<void> getImageFromCam() async {
@@ -291,9 +288,11 @@ class _NewShopPageState extends State<NewShopPage> {
     });
   }
 
-  _initPlatformState() async {
+  Future _initPlatformState() async {
     await _locationService.changeSettings(
-        accuracy: LocationAccuracy.HIGH, interval: 1000);
+      accuracy: LocationAccuracy.HIGH,
+      interval: 1000,
+    );
 
     LocationData location;
     try {
@@ -302,19 +301,11 @@ class _NewShopPageState extends State<NewShopPage> {
         _permission = await _locationService.requestPermission();
         if (_permission) {
           location = await _locationService.getLocation();
-
-          _locationSubscription = _locationService
-              .onLocationChanged()
-              .listen((LocationData result) async {
-            setState(() {
-              _currentLocation = result;
-            });
-          });
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
         if (serviceStatusResult) {
-          _initPlatformState();
+          await _initPlatformState();
         }
       }
     } on PlatformException catch (e) {
@@ -325,10 +316,11 @@ class _NewShopPageState extends State<NewShopPage> {
       }
       location = null;
     }
-
-    setState(() {
-      startLocation = location;
-    });
+    if (this.mounted) {
+      setState(() {
+        startLocation = location;
+      });
+    }
   }
 
   Future<bool> _submitForm(String provinceId, String districtId) async {
@@ -337,8 +329,8 @@ class _NewShopPageState extends State<NewShopPage> {
     form.save();
     String imgUrl = await ImageServices().onImageUploading(_image);
     GeoFirePoint shopLocation = geo.point(
-      latitude: _currentLocation.latitude,
-      longitude: _currentLocation.longitude,
+      latitude: startLocation.latitude,
+      longitude: startLocation.longitude,
     );
 
     Map<String, dynamic> data = {

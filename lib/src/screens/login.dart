@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project_muk/src/scoped_models/user.dart';
+import 'package:project_muk/src/services/auth_service.dart';
 import 'package:project_muk/src/theme/app_themes.dart';
 import 'package:scoped_model/scoped_model.dart';
-
-import '../scoped_models/user.dart';
-import '../services/auth_service.dart';
-import '../services/logging_service.dart';
 
 class LoginPage extends StatefulWidget {
   final BaseAuth auth;
@@ -212,7 +210,6 @@ class _LoginPageState extends State<LoginPage> {
           widget.loginCallback();
         }
       } catch (e) {
-        logger.e(e);
         setState(() {
           _isLoading = false;
           _errorMessage = e.message;
