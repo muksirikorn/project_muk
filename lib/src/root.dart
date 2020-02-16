@@ -72,15 +72,6 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
-      // case AuthStatus.NOT_DETERMINED:
-      //   return HomePage(
-      //     // userId: _userId,
-      //     // userEmail: _userEmail,
-      //     auth: widget.auth,
-      //     logoutCallback: logoutCallback,
-      //     state: 'LOG_OUT',
-      //   );
-      //   break;
       case AuthStatus.LOGGED_OUT:
         return LoginPage(
           auth: widget.auth,
