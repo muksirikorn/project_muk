@@ -1,16 +1,19 @@
 class Location {
-  String info;
-  int geohash;
+  String name;
+  double lat;
+  double lon;
 
   Location({
-    this.info,
-    this.geohash,
+    this.name,
+    this.lat,
+    this.lon,
   });
 
   factory Location.fromJSON(Map<String, dynamic> json) {
     return Location(
-      info: json['i'],
-      geohash: json['g'],
+      name: json['name'],
+      lat: json['lat'],
+      lon: json['lon'],
     );
   }
 }

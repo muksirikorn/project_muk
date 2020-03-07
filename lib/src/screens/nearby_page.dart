@@ -42,7 +42,7 @@ class NearbyState extends State<Nearby> {
                       startLocation.latitude,
                       startLocation.longitude,
                     ),
-                    zoom: 15,
+                    zoom: 5,
                   ),
                   onMapCreated: _onMapCreated,
                   markers: Set<Marker>.of(markers.values),
@@ -82,6 +82,10 @@ class NearbyState extends State<Nearby> {
   }
 
   void _fetchMarkers() async {
+    setState(() {
+      markers.clear();
+    });
+
     await _initPlatformState();
 
     var retriveMarker;
@@ -91,7 +95,7 @@ class NearbyState extends State<Nearby> {
         1,
         startLocation.latitude,
         startLocation.longitude,
-        300000,
+        30000,
       );
 
       final String markerIdVal = 'default_marker';
@@ -107,19 +111,15 @@ class NearbyState extends State<Nearby> {
       });
 
       for (var i = 0; i < retriveMarker.locations.length; i++) {
-        final String markerIdVal = 'marker_id_$i';
+        final String markerIdVal =
+            'marker_id_${retriveMarker.locations[i].name}';
         final MarkerId markerId = MarkerId(markerIdVal);
-
-        var geolo =
-            geoHasher.decode(retriveMarker.locations[i].geohash.toString());
 
         final Marker marker2 = Marker(
           markerId: markerId,
           position: LatLng(
-            LatLng(startLocation.latitude, startLocation.longitude).latitude +
-                sin(geolo[0] * pi / 10.0) / 20.0,
-            LatLng(startLocation.latitude, startLocation.longitude).longitude +
-                cos(geolo[1] * pi / 10.0) / 20.0,
+            retriveMarker.locations[i].lat,
+            retriveMarker.locations[i].lon,
           ),
         );
 
